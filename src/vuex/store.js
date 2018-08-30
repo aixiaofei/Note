@@ -32,7 +32,7 @@ const mutations = {
                 if (state.isOne) {
                     state.isOne = !state.isOne;
                 } else {
-                    Message.success({'message':'天气加载完毕','center':true});
+                    Message.success({ 'message': '天气加载完毕', 'center': true });
                 }
             })
             .catch(error => {

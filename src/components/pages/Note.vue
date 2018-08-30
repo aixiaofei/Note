@@ -36,40 +36,6 @@ export default {
     return {
       multipleSelection: [],
       selectedIDs: [],
-      tableData: [
-        {
-          id: 1,
-          title: "2016-05-02",
-          Founder: "王小虎1",
-          contentDes: "上海市普陀区金沙江路 1518 弄",
-          foundTime: "2016-05-02",
-          lastModifyTime: "2016-05-02"
-        },
-        {
-          id: 2,
-          title: "2016-05-02",
-          Founder: "王小虎2",
-          contentDes: "上海市普陀区金沙江路 1517 弄",
-          foundTime: "2016-05-02",
-          lastModifyTime: "2016-05-02"
-        },
-        {
-          id: 3,
-          title: "2016-05-01",
-          Founder: "王小虎3",
-          contentDes: "上海市普陀区金沙江路 1519 弄",
-          foundTime: "2016-05-02",
-          lastModifyTime: "2016-05-02"
-        },
-        {
-          id: 4,
-          title: "2016-05-03",
-          Founder: "王小虎4",
-          contentDes: "上海市普陀区金沙江路 1516 弄",
-          foundTime: "2016-05-02",
-          lastModifyTime: "2016-05-02"
-        }
-      ]
     };
   },
   methods: {
