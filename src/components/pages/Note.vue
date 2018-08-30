@@ -30,48 +30,19 @@
 </template>
 
 <script>
+import store from "@/vuex/store";
+import { mapState } from "vuex";
 export default {
   name: "Note",
   data() {
     return {
       multipleSelection: [],
-      selectedIDs: [],
-      tableData: [
-        {
-          id: 1,
-          title: "2016-05-02",
-          Founder: "王小虎1",
-          contentDes: "上海市普陀区金沙江路 1518 弄",
-          foundTime: "2016-05-02",
-          lastModifyTime: "2016-05-02"
-        },
-        {
-          id: 2,
-          title: "2016-05-02",
-          Founder: "王小虎2",
-          contentDes: "上海市普陀区金沙江路 1517 弄",
-          foundTime: "2016-05-02",
-          lastModifyTime: "2016-05-02"
-        },
-        {
-          id: 3,
-          title: "2016-05-01",
-          Founder: "王小虎3",
-          contentDes: "上海市普陀区金沙江路 1519 弄",
-          foundTime: "2016-05-02",
-          lastModifyTime: "2016-05-02"
-        },
-        {
-          id: 4,
-          title: "2016-05-03",
-          Founder: "王小虎4",
-          contentDes: "上海市普陀区金沙江路 1516 弄",
-          foundTime: "2016-05-02",
-          lastModifyTime: "2016-05-02"
-        }
-      ]
+      selectedIDs: []
     };
   },
+  computed: mapState({
+    tableData: state => state.tableData
+  }),
   methods: {
     handleSelectionChange(val) {
       this.multipleSelection = val;
@@ -105,10 +76,10 @@ export default {
           });
         });
     },
-    editNote(index,row){
-      if(index==null){
-        this.$router.push('/editNote/addNote');
-      }else{
+    editNote(index, row) {
+      if (index == null) {
+        this.$router.push("/editNote/addNote");
+      } else {
         this.$router.push(`/editNote/${row.id}`);
       }
     },
@@ -133,7 +104,8 @@ export default {
           });
         });
     }
-  }
+  },
+  store
 };
 </script>
 
