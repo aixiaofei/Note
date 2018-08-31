@@ -30,6 +30,8 @@
 </template>
 
 <script>
+import store from '@/vuex/store'
+import { mapState } from "vuex";
 export default {
   name: "Note",
   data() {
@@ -38,6 +40,7 @@ export default {
       selectedIDs: [],
     };
   },
+  computed:mapState(['tableData']),
   methods: {
     handleSelectionChange(val) {
       this.multipleSelection = val;
@@ -99,7 +102,8 @@ export default {
           });
         });
     }
-  }
+  },
+  store
 };
 </script>
 
