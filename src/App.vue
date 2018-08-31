@@ -11,7 +11,7 @@
         <el-aside width="25rem">
           <weather style="margin-top:5rem;margin-left:3rem;"></weather>
         </el-aside>
-        <el-main style="margin-top:3rem;margin-left:2rem;margin-right:3rem;">
+        <el-main style="margin-top:4rem;margin-left:2rem;margin-right:3rem;">
           <router-view></router-view>
         </el-main>
       </el-container>

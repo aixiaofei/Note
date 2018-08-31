@@ -76,6 +76,24 @@ const mutations = {
             .catch(error => {
                 console.log(error);
             });
+    },
+    deleteTableData(state, Ids) {
+        if (Ids instanceof Array) {
+            state.tableData = state.tableData.filter(item => !Ids.includes(item.id));
+        } else {
+            state.tableData = state.tableData.filter(item => Ids != item.id);
+        }
+        console.log(state.tableData);
+    },
+    changeTableData(state, form) {
+        if (form.id != 'addNote') {
+            state.tableData = state.tableData.filter(item => item.id != form.id);
+            state.tableData.push(form);
+            Message.success({ 'message': '信息修改完毕', 'center': true });
+        }else{
+            state.tableData.push(form);
+            Message.success({ 'message': '添加成功', 'center': true });
+        }
     }
 }
 

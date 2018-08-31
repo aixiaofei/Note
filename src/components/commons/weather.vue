@@ -7,7 +7,7 @@
           <el-tooltip style="font-size:0.8rem;" effect="dark" content="点击刷新天气" placement="top">
             <div class="location" @click="changeCity">
               <i style="margin-right:-0.25rem;" class="icon iconfont icon-weizhi"></i>
-              <el-button type="text" style="color:black;">{{city}}</el-button>
+              <el-button type="text" style="color:rgb(55,105,86)">{{city}}</el-button>
             </div>
           </el-tooltip>
         </div>
@@ -33,7 +33,7 @@
           </el-carousel-item>
         </el-carousel>
 
-        <div style="background-color: rgb(112, 161, 159);height:1.8rem;display:flex">
+        <div style="background-color: rgb(222, 166, 129);height:1.8rem;display:flex">
           <span class="update-time">更新时间:{{updataTime}}</span>
         </div>
       </div>
@@ -126,18 +126,17 @@ export default {
   height: 4rem;
   display: flex;
   margin:-1.1rem -1.1rem; 
-  background: rgb(112, 161, 159);
+  background: rgb(222, 166, 129);
 }
 .item-span {
   display: flex;
   margin: auto;
 }
 .el-carousel__item:nth-child(n) {
-  background-color: rgb(112, 161, 159);
+  background-color: rgb(222, 166, 129);
 }
 .update-time {
   font-size: 0.3rem;
-  color: white;
   margin: auto;
   margin-right: 1rem;
 }
