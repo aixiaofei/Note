@@ -1,7 +1,7 @@
 <template>
   <div id="app" style="position:absolute; left:0; top:0; width:100%;height:100%;">
     <el-container>
-      <el-header class="head" height="10rem">
+      <el-header class="head" height="8rem">
         <div style="margin:auto;color:white;margin-left:3rem;display:flex">
           <img :src="indexIcon" style="height:4rem;width:4rem;margin:auto"/>
           <span style="font-size:2rem;margin:auto;margin-left:1rem">简单便签</span>
