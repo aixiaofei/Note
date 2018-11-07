@@ -16,7 +16,7 @@
             <el-form-item>
                 <el-button v-if="noteId=='addNote'" type="primary" @click="onSubmit">创建</el-button>
                 <el-button v-else type="primary" @click="onSubmit">修改</el-button>
-                <el-button>取消</el-button>
+                <el-button @click="goback">取消</el-button>
             </el-form-item>
         </el-form>
     </div>
@@ -63,6 +63,9 @@ export default {
           }
           this.$store.commit('changeTableData',this.form);
           this.$router.push('/');
+      },
+      goback:function(){
+          this.$router.go(-1)
       }
   },
   store

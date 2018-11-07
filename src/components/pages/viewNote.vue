@@ -62,22 +62,25 @@ export default {
           this.$store.commit('deleteTableData',this.selectedIDs);
           this.$message({
             type: "success",
-            message: "删除成功!"
+            message: "删除成功!",
+            center:true
           });
         })
         .catch(() => {
           this.$message({
             type: "info",
-            message: "已取消删除"
+            message: "已取消删除",
+            center:true
           });
         });
     },
     editNote(index,row){
+      debugger
       if(index==null){
-        this.$router.push('/editNote/addNote');
+        this.$router.push('/note/editNote/addNote');
       }else{
         console.log(index);
-        this.$router.push(`/editNote/${row.id}`);
+        this.$router.push(`/note/editNote/${row.id}`);
       }
     },
     deleteNote(index, row) {
