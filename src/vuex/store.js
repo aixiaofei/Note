@@ -1,9 +1,9 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
+import Vue from 'vue'
+import Vuex from 'vuex'
 import axios from 'Axios'
-import { Message } from 'element-ui';
+import { Message } from 'element-ui'
 
-Vue.use(Vuex);
+Vue.use(Vuex)
 
 const state = {
     city: "",
@@ -68,7 +68,7 @@ const mutations = {
                 let d = new Date();
                 state.updataTime = d.toLocaleString();
                 if (state.isOne) {
-                    state.isOne = !state.isOne;
+                    state.isOne = !state.isOne
                 } else {
                     Message.success({ 'message': '天气加载完毕', 'center': true });
                 }

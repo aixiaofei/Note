@@ -51,7 +51,7 @@ export default {
         ids.push(item.id);
       });
       this.selectedIDs = ids;
-      console.log(this.selectedIDs);
+      // console.log(this.selectedIDs);
     },
     batchDeleteNode() {
       this.$confirm("确认删除所有选中的便签?", "提示", {
@@ -61,18 +61,18 @@ export default {
         center: true
       })
         .then(() => {
-          this.tableData = this.tableData.filter(
-            data => !this.selectedIDs.includes(data.id)
-          );
+          this.$store.commit('deleteTableData',this.selectedIDs);
           this.$message({
             type: "success",
-            message: "删除成功!"
+            message: "删除成功!",
+            center:true
           });
         })
         .catch(() => {
           this.$message({
             type: "info",
-            message: "已取消删除"
+            message: "已取消删除",
+            center:true
           });
         });
     },
@@ -91,16 +91,20 @@ export default {
         center: true
       })
         .then(() => {
-          this.tableData = this.tableData.filter(data => row.id != data.id);
+          console.log(row.id);
+          console.log(this.tableData);
+          this.$store.commit('deleteTableData',row.id);
           this.$message({
             type: "success",
-            message: "删除成功!"
+            message: "删除成功!",
+            center: true
           });
         })
         .catch(() => {
           this.$message({
             type: "info",
-            message: "已取消删除"
+            message: "已取消删除",
+            center: true
           });
         });
     }

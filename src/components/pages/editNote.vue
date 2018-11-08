@@ -28,8 +28,10 @@ export default {
   name: "editNote",
   created() {
     let buf = this.$route.params.noteId;
+    this.noteId = buf;
     if (buf != "addNote") {
-      this.noteId = buf;
+      let data = this.tableData.filter(item=>item.id==buf);
+      this.form=data[0];
     }
   },
   data() {
