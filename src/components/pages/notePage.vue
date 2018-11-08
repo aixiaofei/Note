@@ -1,5 +1,5 @@
 <template>
-    <div id="app" style="position:absolute; left:0; top:0; width:100%;height:100%;">
+    <div id="app" class="parent_div">
         <el-container>
             <el-header class="head" height="8rem">
                 <div style="margin:auto;color:white;margin-left:3rem;display:flex">
@@ -35,4 +35,11 @@ export default {
 </script>
 
 <style scoped>
+.parent_div {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
 </style>

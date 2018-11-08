@@ -11,13 +11,13 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      // '/api': {
-      //   target: "http://pv.sohu.com",
-      //   changeOrigin: true,
-      //   pathRewrite: {
-      //     '^/api': ''
-      //   }
-      // },
+      '/api': {
+        target: "http://localhost:8081",
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api': ''
+        }
+      },
       // '/city': {
       //   target: "http://api.map.baidu.com/location",
       //   changeOrigin: true,
