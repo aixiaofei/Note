@@ -11,7 +11,7 @@
           </el-input>
         </el-form-item>
         <el-form-item prop="password">
-          <el-input placeholder="请输入密码" v-model="form.password">
+          <el-input type="password" placeholder="请输入密码" v-model="form.password">
             <i slot="prefix" class="icon iconfont icon-password"></i>
           </el-input>
         </el-form-item>
@@ -27,6 +27,8 @@
 </template>
 
 <script>
+import axios from "axios"
+import store from '@/vuex/common'
 export default {
   name: "login",
   data() {
@@ -34,11 +36,11 @@ export default {
       if (value === "") {
         callback(new Error("请输入用户名"));
       }
-      if (/^\d+$/.test(value)) {
-        callback(new Error("用户名不能全为数字"));
-      }
       if (!/^[\S]{3,12}$/.test(value)) {
         callback(new Error("用户名大小为3到12位，且不能出现空格"));
+      }
+      if (!/^(\d|[a-z])+$/.test(value) || /^\d+$/.test(value)) {
+        callback(new Error("用户名包含数字和字母,不能为全数字"));
       }
       callback();
     };
@@ -49,8 +51,8 @@ export default {
       if (!/^[\S]{6,12}$/.test(value)) {
         callback(new Error("密码大小为6到12位，且不能出现空格"));
       }
-      if (/^\d+$/.test(value) || /^[a-z]+$/.test(value)) {
-        callback(new Error("密码为字母和数字的组合"));
+      if (!/^(\d|[a-z])+$/.test(value)) {
+        callback(new Error("密码包含数字或者字母"));
       }
       callback();
     };
@@ -69,7 +71,39 @@ export default {
     onSubmit(form) {
       this.$refs[form].validate(valid => {
         if (valid) {
-          alert("submit!");
+          axios({
+            method: "post",
+            baseURL: "/api",
+            url: "/login/goLogin",
+            data: {
+                userName: this.form.name,
+                password: this.form.password
+            }
+          }).then(response => {
+            if (response.data.statu === "success") {
+              this.$message({
+                message: response.data.msg,
+                type: "success",
+                center: true
+              })
+              this.$store.commit('changeUser', response.data.data)
+              this.$router.push("/note");
+            }else {
+                this.$message({
+                message: response.data.msg,
+                type: "warning",
+                center: true
+              })
+              return false
+            }
+          }).catch(error=>{
+              this.$message({
+                message: "登录失败",
+                type: "error",
+                center: true
+              })
+              return false
+          })
         } else {
           console.log("error submit!!");
           return false;
@@ -79,8 +113,9 @@ export default {
     goRegister() {
       this.$router.push("/register");
     }
-  }
-};
+  },
+  store
+}
 </script>
 
 <style scoped>

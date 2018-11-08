@@ -29,7 +29,8 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from "axios"
+import store from '@/vuex/common'
 export default {
   name: "login",
   data() {
@@ -37,11 +38,11 @@ export default {
       if (value === "") {
         callback(new Error("请输入用户名"));
       }
-      if (/^\d+$/.test(value)) {
-        callback(new Error("用户名不能全为数字"));
-      }
       if (!/^[\S]{3,12}$/.test(value)) {
         callback(new Error("用户名大小为3到12位，且不能出现空格"));
+      }
+      if (!/^(\d|[a-z])+$/.test(value) || /^\d+$/.test(value)) {
+        callback(new Error("用户名包含数字和字母,不能为全数字"));
       }
       callback();
     };
@@ -52,7 +53,7 @@ export default {
       if (!/^[\S]{6,12}$/.test(value)) {
         callback(new Error("密码大小为6到12位，且不能出现空格"));
       }
-      if (/^\d+$/.test(value) || /^[a-z]+$/.test(value)) {
+      if (!/^(\d|[a-z])+$/.test(value)) {
         callback(new Error("密码为字母和数字的组合"));
       }
       callback();
@@ -98,6 +99,7 @@ export default {
                 type: "success",
                 center: true
               })
+              this.$store.commit('changeUser', response.data.data)
               this.$router.push("/note");
             }else {
                 this.$message({
@@ -121,8 +123,9 @@ export default {
         }
       });
     }
-  }
-};
+  },
+  store
+}
 </script>
 
 <style scoped>

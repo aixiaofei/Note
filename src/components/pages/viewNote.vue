@@ -75,7 +75,6 @@ export default {
         });
     },
     editNote(index,row){
-      debugger
       if(index==null){
         this.$router.push('/note/editNote/addNote');
       }else{

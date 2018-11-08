@@ -2,10 +2,11 @@
     <div id="app" class="parent_div">
         <el-container>
             <el-header class="head" height="8rem">
-                <div style="margin:auto;color:white;margin-left:3rem;display:flex">
-                    <img :src="indexIcon" style="height:3.5rem;width:3.5rem;margin:auto" />
-                    <span style="font-size:2rem;margin:auto;margin-left:1rem">简单便签</span>
+                <div class="head_div">
+                    <img :src="indexIcon" class="head_div_img" />
+                    <span class="head_div_span">简单便签</span>
                 </div>
+                <el-button type="text" style="color: white">{{user.userName}}</el-button>
             </el-header>
             <el-container>
                 <el-aside width="25rem">
@@ -21,6 +22,8 @@
 
 <script>
 import weather from "@/components/commons/weather";
+import store from "@/vuex/common";
+import { mapState, mapMutations } from "vuex";
 export default {
   name: "notePage",
   data() {
@@ -28,9 +31,15 @@ export default {
       indexIcon: require("@/assets/images/bianqian.png")
     };
   },
+  computed: {
+    user() {
+      return this.$store.state.user 
+    }
+  },
   components: {
     weather
-  }
+  },
+  store
 };
 </script>
 
@@ -41,5 +50,20 @@ export default {
   top: 0;
   width: 100%;
   height: 100%;
+}
+.head_div {
+  color: white;
+  margin-left: 3rem;
+  display: flex;
+}
+.head_div_img {
+  height: 3.5rem;
+  width: 3.5rem;
+  margin: auto;
+}
+.head_div_span {
+  font-size: 2rem;
+  margin: auto;
+  margin-left: 0.6rem;
 }
 </style>

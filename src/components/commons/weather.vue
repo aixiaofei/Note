@@ -6,8 +6,9 @@
           <span class="weather">天气</span>
           <el-tooltip style="font-size:0.8rem;" effect="dark" content="点击刷新天气" placement="top">
             <div class="location" @click="changeCity">
-              <i style="margin-right:-0.25rem;" class="icon iconfont icon-weizhi"></i>
-              <el-button type="text" style="color:rgb(55,105,86)">{{city}}</el-button>
+              <el-button type="text" style="color: #303133">
+                <i class="icon iconfont icon-weizhi"></i>
+                {{city}}</el-button>
             </div>
           </el-tooltip>
         </div>

@@ -90,7 +90,7 @@ const mutations = {
             state.tableData = state.tableData.filter(item => item.id != form.id);
             state.tableData.push(form);
             Message.success({ 'message': '信息修改完毕', 'center': true });
-        }else{
+        } else {
             state.tableData.push(form);
             Message.success({ 'message': '添加成功', 'center': true });
         }
