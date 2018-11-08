@@ -6,6 +6,7 @@ import notePage from '@/components/pages/notePage'
 import viewNote from '@/components/pages/viewNote'
 import editNote from '@/components/pages/editNote'
 import axios from "axios"
+import { Message } from 'element-ui'
 
 Vue.use(Router)
 
@@ -41,6 +42,9 @@ const router = new Router({
 })
 
 router.beforeEach((to, from, next) => {
+  if(to.path == "/" || to.path == "/register"){
+    next()
+  }
   axios({
     method: "get",
     baseURL: "/api",
@@ -48,8 +52,11 @@ router.beforeEach((to, from, next) => {
   }).then(response=>{
     if(response.data.code == "200"){
       next()
+    }else if(response.data.code == "201"){
+      next("/")
     }else{
-      
+      Message.error({ 'message': response.data.msg, 'center': true })
+      next("/")
     }
   })
 })

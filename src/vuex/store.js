@@ -1,9 +1,9 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
+import Vue from 'vue'
+import Vuex from 'vuex'
 import axios from 'Axios'
-import { Message } from 'element-ui';
+import { Message } from 'element-ui'
 
-Vue.use(Vuex);
+Vue.use(Vuex)
 
 const state = {
     city: "",
@@ -60,39 +60,39 @@ const mutations = {
                 "/daily.json?key=2ifeg5yvlwdp8fga&location=ip&language=zh-Hans&unit=c&start=0"
         })
             .then(response => {
-                // console.log(response);
-                state.city = response.data.results[0].location.name;
-                state.weatherData = response.data.results[0].daily;
-                console.log(state.weatherData);
-                // let time = response.data.results[0].last_update;
-                let d = new Date();
-                state.updataTime = d.toLocaleString();
+                // console.log(response)
+                state.city = response.data.results[0].location.name
+                state.weatherData = response.data.results[0].daily
+                console.log(state.weatherData)
+                // let time = response.data.results[0].last_update
+                let d = new Date()
+                state.updataTime = d.toLocaleString()
                 if (state.isOne) {
-                    state.isOne = !state.isOne;
+                    state.isOne = !state.isOne
                 } else {
-                    Message.success({ 'message': '天气加载完毕', 'center': true });
+                    Message.success({ 'message': '天气加载完毕', 'center': true })
                 }
             })
             .catch(error => {
-                console.log(error);
-            });
+                console.log(error)
+            })
     },
     deleteTableData(state, Ids) {
         if (Ids instanceof Array) {
-            state.tableData = state.tableData.filter(item => !Ids.includes(item.id));
+            state.tableData = state.tableData.filter(item => !Ids.includes(item.id))
         } else {
-            state.tableData = state.tableData.filter(item => Ids != item.id);
+            state.tableData = state.tableData.filter(item => Ids != item.id)
         }
-        console.log(state.tableData);
+        console.log(state.tableData)
     },
     changeTableData(state, form) {
         if (form.id != 'addNote') {
-            state.tableData = state.tableData.filter(item => item.id != form.id);
-            state.tableData.push(form);
-            Message.success({ 'message': '信息修改完毕', 'center': true });
+            state.tableData = state.tableData.filter(item => item.id != form.id)
+            state.tableData.push(form)
+            Message.success({ 'message': '信息修改完毕', 'center': true })
         } else {
-            state.tableData.push(form);
-            Message.success({ 'message': '添加成功', 'center': true });
+            state.tableData.push(form)
+            Message.success({ 'message': '添加成功', 'center': true })
         }
     }
 }
