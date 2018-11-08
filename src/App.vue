@@ -1,5 +1,4 @@
 <template>
-<<<<<<< HEAD
   <div id="app" style="position:absolute; left:0; top:0; width:100%;height:100%;">
     <el-container>
       <el-header class="head" height="10rem">
@@ -18,9 +17,6 @@
       </el-container>
     </el-container>
   </div>
-=======
-  <router-view></router-view>
->>>>>>> 9fd0ecd93f5ad0a335bbbc5d0a0837421cbef88c
 </template>
 
 <script>
