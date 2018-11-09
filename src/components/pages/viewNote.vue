@@ -30,17 +30,19 @@
 </template>
 
 <script>
-import store from '@/vuex/store'
+import store from "@/vuex/store";
 import { mapState } from "vuex";
 export default {
   name: "Note",
   data() {
     return {
       multipleSelection: [],
-      selectedIDs: [],
+      selectedIDs: []
     };
   },
-  computed:mapState(['tableData']),
+  computed: mapState({
+    tableData: state => state.tableData
+  }),
   methods: {
     handleSelectionChange(val) {
       this.multipleSelection = val;
@@ -74,12 +76,11 @@ export default {
           });
         });
     },
-    editNote(index,row){
-      if(index==null){
-        this.$router.push('/note/editNote/addNote');
-      }else{
-        console.log(index);
-        this.$router.push(`/note/editNote/${row.id}`);
+    editNote(index, row) {
+      if (index == null) {
+        this.$router.push("/editNote/addNote");
+      } else {
+        this.$router.push(`/editNote/${row.id}`);
       }
     },
     deleteNote(index, row) {
