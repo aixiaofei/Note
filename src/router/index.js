@@ -44,6 +44,7 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
   if(to.path == "/" || to.path == "/register"){
     next()
+    return
   }
   axios({
     method: "get",
@@ -52,11 +53,14 @@ router.beforeEach((to, from, next) => {
   }).then(response=>{
     if(response.data.code == "200"){
       next()
+      return
     }else if(response.data.code == "201"){
       next("/")
+      return
     }else{
       Message.error({ 'message': response.data.msg, 'center': true })
       next("/")
+      return
     }
   })
 })

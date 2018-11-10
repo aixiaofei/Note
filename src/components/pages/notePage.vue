@@ -1,29 +1,29 @@
 <template>
-    <div id="app" class="parent_div">
-        <el-container>
-            <el-header class="head" height="8rem">
-                <div class="head_div">
-                    <img :src="indexIcon" class="head_div_img" />
-                    <span class="head_div_span">简单便签</span>
-                </div>
-                <el-button type="text" style="color: white">{{user.userName}}</el-button>
-            </el-header>
-            <el-container>
-                <el-aside width="25rem">
-                    <weather style="margin-top:5rem;margin-left:3rem;"></weather>
-                </el-aside>
-                <el-main style="margin-top:4rem;margin-left:2rem;margin-right:3rem;">
-                    <router-view></router-view>
-                </el-main>
-            </el-container>
-        </el-container>
-    </div>
+  <div id="app" class="parent_div">
+    <el-container>
+      <el-header class="head" height="8rem">
+        <div class="head_div">
+          <img :src="indexIcon" class="head_div_img" />
+          <span class="head_div_span">简单便签</span>
+        </div>
+        <el-button type="text" style="color: white">{{user.userName}}</el-button>
+      </el-header>
+      <el-container>
+        <el-aside width="25rem">
+          <weather style="margin-top:5rem;margin-left:3rem"></weather>
+        </el-aside>
+        <el-main style="margin-top:4rem;margin-left:2rem;margin-right:3rem">
+          <router-view></router-view>
+        </el-main>
+      </el-container>
+    </el-container>
+  </div>
 </template>
 
 <script>
-import weather from "@/components/commons/weather";
-import store from "@/vuex/common";
-import { mapState, mapMutations } from "vuex";
+import weather from "@/components/commons/weather"
+import store from "@/vuex/store"
+import { mapState, mapMutations } from "vuex"
 export default {
   name: "notePage",
   data() {
@@ -33,7 +33,7 @@ export default {
   },
   computed: {
     user() {
-      return this.$store.state.user 
+      return this.$store.state.user;
     }
   },
   components: {

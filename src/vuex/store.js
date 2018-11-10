@@ -6,6 +6,7 @@ import { Message } from 'element-ui'
 Vue.use(Vuex)
 
 const state = {
+    user: {},
     city: "",
     updataTime: '',
     weatherData: '',
@@ -52,6 +53,9 @@ const state = {
 }
 
 const mutations = {
+    changeUser(state, user) {
+        state.user = user
+    },
     changeCity(state) {
         axios({
             method: "get",

@@ -1,7 +1,7 @@
 <template>
   <div>
     <transition name="el-zoom-in-top">
-      <el-button v-if="multipleSelection.length>0" type="danger" class="batchDelete-note" @click="batchDeleteNode">批量删除</el-button>
+      <el-button v-if="multipleSelection.length>1" type="danger" class="batchDelete-note" @click="batchDeleteNode">批量删除</el-button>
     </transition>
     <el-button type="primary" class="add-note" @click="editNote(null,null)">添加笔记</el-button>
     <el-table :data="tableData" border style="width: 100%" ref="multipleTable" tooltip-effect="dark" @selection-change="handleSelectionChange">>
@@ -78,9 +78,9 @@ export default {
     },
     editNote(index, row) {
       if (index == null) {
-        this.$router.push("/editNote/addNote");
+        this.$router.push("/note/editNote/addNote");
       } else {
-        this.$router.push(`/editNote/${row.id}`);
+        this.$router.push(`/note/editNote/${row.id}`);
       }
     },
     deleteNote(index, row) {

@@ -28,7 +28,7 @@
 
 <script>
 import axios from "axios"
-import store from '@/vuex/common'
+import store from '@/vuex/store'
 export default {
   name: "login",
   data() {
