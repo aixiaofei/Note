@@ -3,7 +3,7 @@
     <el-card shadow="shadow" class="card">
       <el-form ref="form" :model="form" :rules="rules" status-icon>
         <el-form-item class="title">
-          <i class="icon iconfont icon-denglu main_icon"></i>
+          <i class="icon iconfont icon-heart main_icon"></i>
         </el-form-item>
         <el-form-item prop="name">
           <el-input placeholder="请输入用户名" v-model="form.name">
@@ -27,8 +27,8 @@
 </template>
 
 <script>
-import axios from "axios"
-import store from '@/vuex/store'
+import axios from "axios";
+import { Base64 } from "js-base64";
 export default {
   name: "login",
   data() {
@@ -71,39 +71,49 @@ export default {
     onSubmit(form) {
       this.$refs[form].validate(valid => {
         if (valid) {
+          debugger
+          let now = this.GLOBAL.dateFtt("yyyy-MM-dd hh:mm:ss", new Date());
+          let lastLoginIp = returnCitySN["cip"];
+          let lastLoginAddress = returnCitySN["cname"];
           axios({
             method: "post",
-            baseURL: "/api",
             url: "/login/goLogin",
             data: {
-                userName: this.form.name,
-                password: this.form.password
+              userName: this.form.name,
+              password: Base64.encode(
+                this.form.name + "," + this.form.password
+              ),
+              lastLoginTime: now,
+              lastLoginIp: lastLoginIp,
+              lastLoginAddress: lastLoginAddress
             }
-          }).then(response => {
-            if (response.data.statu === "success") {
-              this.$message({
-                message: response.data.msg,
-                type: "success",
-                center: true
-              })
-              this.$store.commit('changeUser', response.data.data)
-              this.$router.push("/note");
-            }else {
+          })
+            .then(response => {
+              if (response.data.statu === "success") {
                 this.$message({
-                message: response.data.msg,
-                type: "warning",
-                center: true
-              })
-              return false
-            }
-          }).catch(error=>{
+                  message: response.data.msg,
+                  type: "success",
+                  center: true
+                });
+                this.$store.commit("changeUser", response.data.data);
+                this.$router.push("/note");
+              } else {
+                this.$message({
+                  message: response.data.msg,
+                  type: "warning",
+                  center: true
+                });
+                return false;
+              }
+            })
+            .catch(error => {
               this.$message({
                 message: "登录失败",
                 type: "error",
                 center: true
-              })
-              return false
-          })
+              });
+              return false;
+            });
         } else {
           console.log("error submit!!");
           return false;
@@ -113,9 +123,8 @@ export default {
     goRegister() {
       this.$router.push("/register");
     }
-  },
-  store
-}
+  }
+};
 </script>
 
 <style scoped>

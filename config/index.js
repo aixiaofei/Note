@@ -17,21 +17,7 @@ module.exports = {
         pathRewrite: {
           '^/api': ''
         }
-      },
-      // '/city': {
-      //   target: "http://api.map.baidu.com/location",
-      //   changeOrigin: true,
-      //   pathRewrite: {
-      //     '^/city': ''
-      //   }
-      // },
-      '/weather': {
-        target: "https://api.seniverse.com/v3/weather",
-        changeOrigin: true,
-        pathRewrite: {
-          '^/weather': ''
-        }
-      },
+      }
     },
 
     // Various Dev Server settings

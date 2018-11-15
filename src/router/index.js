@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/components/login/login'
 import Register from '@/components/login/register'
-import notePage from '@/components/pages/notePage'
+import lovePage from '@/components/pages/lovePage'
 import viewNote from '@/components/pages/viewNote'
 import editNote from '@/components/pages/editNote'
 import axios from "axios"
@@ -23,9 +23,9 @@ const router = new Router({
       component: Register
     },
     {
-      path: '/note',
-      name: 'note',
-      component: notePage,
+      path: '/love',
+      name: 'love',
+      component: lovePage,
       children: [
         {
           path: '/',
@@ -42,7 +42,7 @@ const router = new Router({
 })
 
 router.beforeEach((to, from, next) => {
-  if(to.path == "/" || to.path == "/register"){
+  if (to.path == "/" || to.path == "/register") {
     next()
     return
   }
@@ -50,18 +50,23 @@ router.beforeEach((to, from, next) => {
     method: "get",
     baseURL: "/api",
     url: "/checkPermission",
-  }).then(response=>{
-    if(response.data.code == "200"){
+  }).then(response => {
+    if (response.data.code == "200") {
       next()
       return
-    }else if(response.data.code == "201"){
+    } else if (response.data.code == "201") {
+      Message.error({ 'message': response.data.msg, 'center': true })
       next("/")
       return
-    }else{
+    } else if (response.data.code == "202") {
       Message.error({ 'message': response.data.msg, 'center': true })
       next("/")
       return
     }
+  }).catch(error => {
+    Message.error({ 'message': "未知错误", 'center': true })
+    next("/")
+    return
   })
 })
 

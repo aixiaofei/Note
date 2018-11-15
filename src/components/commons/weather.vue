@@ -1,41 +1,29 @@
 <template>
   <div>
-    <el-card class="box-card" shadow="hover" :body-style="{padding: '0px'}">
+    <el-card class="box-card" shadow="always" :body-style="{padding: '0px'}">
       <div slot="header" class="clearfix">
-        <div class="head-div">
+        <div class="head_div">
           <span class="weather">天气</span>
-          <el-tooltip style="font-size:0.8rem;" effect="dark" content="点击刷新天气" placement="top">
-            <div class="location" @click="changeCity">
-              <el-button type="text" style="color: #303133">
-                <i class="icon iconfont icon-weizhi"></i>
-                {{city}}</el-button>
-            </div>
+          <el-tooltip style="font-size: 0.8rem;" effect="dark" content="点击刷新天气" placement="top">
+            <el-button type="text" @click="changeCity" class="location">
+              <i class="icon iconfont icon-weizhi" @click="changeCity"></i>
+              {{city}}
+            </el-button>
           </el-tooltip>
         </div>
       </div>
       <div>
-        <el-carousel height="14rem">
-          <el-carousel-item v-for="(item,index) in weatherDataFull" :key="index">
-            <div>
-              <div class="item-div">
-                <span style="margin:auto;">{{weatherDataFull[index].date}} {{item.des}} {{item.low}}℃-{{item.high}}℃ {{item.wind_direction}}风</span>
-              </div>
-              <div class="item-div">
-                <span class="item-span">
-                  <span style="margin:auto;">白天天气:{{item.text_day}}</span>
-                  <img v-bind:src="item.src_day" class="img" /></span>
-              </div>
-              <div class="item-div">
-                <span class="item-span">
-                  <span style="margin:auto;">夜晚天气:{{item.text_night}}</span>
-                  <img v-bind:src="item.src_night" class="img" /></span>
-              </div>
-            </div>
+        <el-carousel height="12rem" :interval="10000" indicator-position="none">
+          <el-carousel-item v-for="(item,index) in weatherData" :key="index">
+            <div class="item_div">
+              <i class="icon iconfont icon-shijian"></i> {{item.date}} {{item.week}} {{item.day}}</div>
+            <div class="item_div">{{item.wea}}</div>
+            <div class="item_div"><i class="icon iconfont icon-fengli"></i> {{item.tem2}}~{{item.tem1}} {{item.win[0]}} {{item.win_speed}}</div>
+            <div v-if="item.air" class="item_div"><i class="icon iconfont icon-kongqizhiliang"></i> 空气指数:{{item.air}} 空气质量:{{item.air_level}}</div>
           </el-carousel-item>
         </el-carousel>
-
-        <div style="background-color: rgb(222, 166, 129);height:1.8rem;display:flex">
-          <span class="update-time">更新时间:{{updataTime}}</span>
+        <div style="height: 1.8rem;display: flex">
+          <span class="update-time">更新时间: {{updataTime}}</span>
         </div>
       </div>
     </el-card>
@@ -44,56 +32,55 @@
 
 <script>
 import axios from "axios";
-import store from "@/vuex/store";
-import { mapState, mapMutations } from "vuex";
-
 export default {
   name: "weather",
   created() {
-    this.$store.commit("changeCity");
+    this.changeCity();
   },
   data() {
-    return {};
+    return {
+      city: "",
+      updataTime: "",
+      weatherData: "",
+    };
   },
-  computed: {
-    city() {
-      return this.$store.state.city;
-    },
-    updataTime() {
-      return this.$store.state.updataTime;
-    },
-    weatherData() {
-      return this.$store.state.weatherData;
-    },
-    dateDes() {
-      return this.$store.state.dateDes;
-    },
-    weatherDataFull: function() {
-      var i = 0;
-      for (let item of this.weatherData) {
-        let buf = {
-          des: this.dateDes[i],
-          src_day: require(`@/assets/weatherIcon/${item.code_day}.png`),
-          src_night: require(`@/assets/weatherIcon/${item.code_night}.png`)
-        };
-        item = Object.assign(item, buf);
-        i++;
-      }
-      return this.weatherData;
+  computed: {},
+  methods: {
+    changeCity() {
+      axios({
+        method: "get",
+        headers: { "content-type": "application/x-www-form-urlencoded" },
+        url: "https://www.tianqiapi.com/api/",
+        params: {
+          version: "v1",
+          ip: returnCitySN["cip"]
+        }
+      })
+        .then(response => {
+          debugger;
+          this.city = response.data.city;
+          this.weatherData = response.data.data;
+          this.updataTime = response.data.update_time;
+          this.$message({
+            message: "天气加载完毕",
+            type: "success",
+            center: true
+          });
+        })
+        .catch(error => {
+          console.log(error);
+          this.$message({
+            message: "天气加载失败",
+            type: "error",
+            center: true
+          });
+        });
     }
-  },
-  methods: mapMutations(["changeCity"]),
-  store
+  }
 };
 </script>
 
 <style scoped>
-.img {
-  margin: auto;
-  height: 4rem;
-  width: 4rem;
-  margin-left: 1rem;
-}
 .clearfix:before,
 .clearfix:after {
   display: table;
@@ -103,42 +90,33 @@ export default {
 .clearfix:after {
   clear: both;
 }
-
 .box-card {
-  width: 20rem;
+  width: 16rem;
+  background-color: #f2f2f0;
+}
+.head_div {
+  display: flex;
+  justify-content: space-between;
+  margin: -6px 0;
 }
 .weather {
-  margin: auto;
   font-size: 1rem;
-  margin-left: 1rem;
+  margin-top: auto;
+  margin-bottom: auto
 }
 .location {
+  font-size: 0.6rem;
+  color: #303133;
+}
+.item_div {
   font-size: 0.8rem;
-  margin: auto;
-  margin-right: 1rem;
-  margin-bottom: 0.8rem;
-}
-.item-div {
-  height: 4rem;
-  display: flex;
-  font-size: 0.8rem;
-}
-.head-div {
-  height: 4rem;
-  display: flex;
-  margin:-1.1rem -1.1rem; 
-  background: rgb(222, 166, 129);
-}
-.item-span {
-  display: flex;
-  margin: auto;
-}
-.el-carousel__item:nth-child(n) {
-  background-color: rgb(222, 166, 129);
+  margin-top: 1rem
 }
 .update-time {
   font-size: 0.3rem;
-  margin: auto;
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-left: auto;
   margin-right: 1rem;
 }
 </style>

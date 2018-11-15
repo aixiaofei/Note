@@ -5,13 +5,14 @@
         <el-input v-model="form.title"></el-input>
       </el-form-item>
       <el-form-item label="是否重要:" align="left">
-        <el-switch v-model="form.isImportant"></el-switch>
+        <el-switch v-model="form.important"></el-switch>
       </el-form-item>
       <el-form-item label="内容:" align="left">
-        <el-input v-model="form.contentDes" type="textarea" :autosize="{ minRows: 8, maxRows: 20}"></el-input>
+        <el-input v-model="form.content" type="textarea" :autosize="{ minRows: 8, maxRows: 20}"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="onSubmit">立即创建</el-button>
+        <el-button v-if="this.form.noteId>0" type="primary" @click="onSubmit">修改</el-button>
+        <el-button v-else type="primary" @click="onSubmit">创建</el-button>
         <el-button @click="goback">取消</el-button>
       </el-form-item>
     </el-form>
@@ -19,52 +20,100 @@
 </template>
 
 <script>
-import store from "@/vuex/store";
+import axios from "Axios";
 import { mapState, mapMutations } from "vuex";
 export default {
   name: "editNote",
   created() {
     let buf = this.$route.params.noteId;
-    this.noteId = buf;
     if (buf != "addNote") {
-      let data = this.tableData.filter(item => item.id == buf);
+      this.form.noteId = Number.parseInt(buf);
+      let data = this.tableData.filter(item =>
+        Object.is(item.noteId, this.form.noteId)
+      );
       this.form = data[0];
+      Object.is(data[0].important, 1)
+        ? (this.form.important = true)
+        : (this.form.important = false);
     }
   },
   data() {
     return {
-      noteId: null,
       labelPosition: "right",
       form: {
+        noteId: -1,
         title: "",
-        isImportant: false,
-        contentDes: "",
-        foundTime: "",
-        lastModifyTime: ""
+        content: "",
+        important: false,
+        createTime: null,
+        modifyTime: null
       }
     };
   },
   computed: mapState({
-    tableData: state => state.tableData
+    tableData: state => state.tableData,
+    user: state => state.user
   }),
   methods: {
-    ...mapMutations(["changeTableData"]),
     onSubmit() {
       debugger
-      this.form.foundTime = new Date();
-      this.form.lastModifyTime = this.form.foundTime;
-      let noteId = {
-        noteId: this.noteId
-      };
-      this.form = Object.assign(this.form, noteId);
-      this.$store.commit("changeTableData", this.form);
-      this.$router.push("/note");
+      let now = new Date();
+      now = this.GLOBAL.dateFtt('yyyy-MM-dd hh:mm:ss', now);
+      if (this.form.noteId > 0) {
+        this.form.modifyTime = now;
+      } else {
+        this.form.createTime = now;
+        this.form.modifyTime = this.form.createTime;
+      }
+      this.changeNote();
+    },
+    changeNote() {
+      axios({
+        method: "post",
+        url: "/note/addNote",
+        data: {
+          noteId: this.form.noteId,
+          userName: this.user.userName,
+          title: this.form.title,
+          content: this.form.content,
+          createTime: this.form.createTime,
+          modifyTime: this.form.modifyTime,
+          important: this.form.important ? 1 : 0
+        }
+      })
+        .then(response => {
+          if (Object.is(response.data.statu, "success")) {
+            this.$message({
+              message: response.data.msg,
+              type: "success",
+              center: true
+            });
+            this.$router.push("/note");
+          } else {
+            this.$message({
+              message: response.data.msg,
+              type: "error",
+              center: true
+            });
+            this.$router.push("/note");
+            return false;
+          }
+        })
+        .catch(error => {
+          console.log(error);
+          this.$message({
+            message: "更新错误",
+            type: "error",
+            center: true
+          });
+          this.$router.push("/note");
+          return false;
+        });
     },
     goback() {
-      this.$router.go(-1)
+      this.$router.go(-1);
     }
-  },
-  store
+  }
 };
 </script>
 
