@@ -152,7 +152,7 @@ export default {
                   center: true
                 });
                 this.$store.commit("changeUser", response.data.data);
-                this.$router.push("/note");
+                this.$router.push("/");
               } else {
                 this.$message({
                   message: response.data.msg,

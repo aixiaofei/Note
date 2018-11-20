@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-card class="box-card" shadow="always" :body-style="{padding: '0px'}">
+    <el-card class="box-card" shadow="never" :body-style="{padding: '0px'}">
       <div slot="header" class="clearfix">
         <div class="head_div">
           <span class="weather">天气</span>
@@ -57,7 +57,6 @@ export default {
         }
       })
         .then(response => {
-          debugger;
           this.city = response.data.city;
           this.weatherData = response.data.data;
           this.updataTime = response.data.update_time;

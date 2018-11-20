@@ -7,12 +7,23 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import store from "@/vuex/store";
 import axios from 'axios'
-import globalData from '@/components/commons/global'
+import globalData from '@/components/global/global'
+import '@/assets/css/color.css'
+import connection from '@/components/connection/connection'
+import processMessage from '@/components/connection/processMessage'
+import iView from 'iview';
+import 'iview/dist/styles/iview.css';
 
 Vue.config.productionTip = false
 Vue.prototype.GLOBAL = globalData
 Vue.use(ElementUI);
+Vue.use(iView);
 axios.defaults.baseURL = globalData.BASE_URL
+let strategies = Vue.config.optionMergeStrategies
+strategies.myOption = strategies.methods
+Vue.use(connection, {
+  processMessage: processMessage
+})
 
 /* eslint-disable no-new */
 new Vue({

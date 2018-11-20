@@ -6,20 +6,32 @@ Vue.use(Vuex)
 
 const state = {
     user: {},
-    tableData: []
+    loveUser: {},
+    loveUserOnline: false,
+    myloveNumber: 0,
+    loveNumber: 0
 }
 
 const mutations = {
     changeUser(state, user) {
-        state.user = user
+        state.user = user;
     },
-    changeTable(state, tableData) {
-        state.tableData = tableData;
+    changeLoveUser(state, user) {
+        state.loveUser = user;
     },
+    changeLoveUserOnline(state, online) {
+        state.loveUserOnline = online
+    },
+    changeLoveNumber(state, relation) {
+        state.myloveNumber = relation.myloveNumber;
+        state.loveNumber = relation.loveNumber;
+    }
 }
 
-export default new Vuex.Store({
+const store = new Vuex.Store({
     state,
     mutations,
     plugins: [vuexAlong]
 })
+
+export default store

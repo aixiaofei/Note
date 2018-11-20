@@ -71,7 +71,6 @@ export default {
     onSubmit(form) {
       this.$refs[form].validate(valid => {
         if (valid) {
-          debugger
           let now = this.GLOBAL.dateFtt("yyyy-MM-dd hh:mm:ss", new Date());
           let lastLoginIp = returnCitySN["cip"];
           let lastLoginAddress = returnCitySN["cname"];
@@ -89,6 +88,10 @@ export default {
             }
           })
             .then(response => {
+              if(response.data.code == "201"){
+                this.$router.push("/love");
+                return false;
+              }
               if (response.data.statu === "success") {
                 this.$message({
                   message: response.data.msg,
@@ -96,7 +99,7 @@ export default {
                   center: true
                 });
                 this.$store.commit("changeUser", response.data.data);
-                this.$router.push("/note");
+                this.$router.push("/love");
               } else {
                 this.$message({
                   message: response.data.msg,

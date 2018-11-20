@@ -3,8 +3,7 @@ import Router from 'vue-router'
 import Login from '@/components/login/login'
 import Register from '@/components/login/register'
 import lovePage from '@/components/pages/lovePage'
-import viewNote from '@/components/pages/viewNote'
-import editNote from '@/components/pages/editNote'
+import loveContent from '@/components/pages/loveContent'
 import axios from "axios"
 import { Message } from 'element-ui'
 
@@ -28,34 +27,32 @@ const router = new Router({
       component: lovePage,
       children: [
         {
-          path: '/',
-          name: 'viewNote',
-          component: viewNote
-        },
-        {
-          path: 'editNote/:noteId',
-          name: 'editNote',
-          component: editNote
-        }]
+          path: "/",
+          name: "loveContent",
+          component: loveContent
+        }
+      ]
     }
   ]
 })
 
 router.beforeEach((to, from, next) => {
-  if (to.path == "/" || to.path == "/register") {
-    next()
-    return
-  }
   axios({
     method: "get",
-    baseURL: "/api",
     url: "/checkPermission",
   }).then(response => {
     if (response.data.code == "200") {
+      if(to.path == "/" || to.path == "/register"){
+        next("/love")
+        return
+      }
       next()
       return
     } else if (response.data.code == "201") {
-      Message.error({ 'message': response.data.msg, 'center': true })
+      if (to.path == "/" || to.path == "/register") {
+        next()
+        return
+      }
       next("/")
       return
     } else if (response.data.code == "202") {

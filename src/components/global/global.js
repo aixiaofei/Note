@@ -1,14 +1,8 @@
-<template>
-  <div>
-
-  </div>
-</template>
-
-<script>
+import { mapState, mapMutations } from "vuex";
 const BASE_URL = "/api";
+
 export default {
   BASE_URL,
-
   //格式化时间
   dateFtt(fmt, date) {
     var o = {
@@ -34,9 +28,10 @@ export default {
             : ("00" + o[k]).substr(("" + o[k]).length)
         );
     return fmt;
-  }
+  },
+  computed: {
+    ...mapState({
+      user: state => state.user,
+    })
+  },
 }
-</script>
-
-<style scoped>
-</style>

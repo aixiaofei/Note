@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="parent_div">
+  <div class="parent_div">
     <el-container>
       <el-header class="head" height="3rem">
         <el-row>
@@ -23,10 +23,11 @@
         </el-row>
       </el-header>
       <el-container>
-        <el-aside width="23rem">
-          <weather style="margin-top:5rem;margin-left:1.5rem"></weather>
+        <el-aside width="20rem">
+          <showStatus style="margin-top:2rem;margin-left:1.5rem"></showStatus>
+          <weather style="margin-top:2rem;margin-left:1.5rem"></weather>
         </el-aside>
-        <el-main style="margin-top:4rem;margin-right:1.5rem">
+        <el-main style="margin-top:1rem">
           <router-view></router-view>
         </el-main>
       </el-container>
@@ -35,7 +36,9 @@
 </template>
 
 <script>
+import axios from "axios";
 import weather from "@/components/commons/weather";
+import showStatus from "@/components/commons/showStatus";
 import { mapState, mapMutations } from "vuex";
 export default {
   name: "notePage",
@@ -44,13 +47,88 @@ export default {
       indexIcon: require("@/assets/images/aixin.png")
     };
   },
+  created() {
+    this.$initSoket();
+    this.getLoveInfo(this.user).then(response => {
+      this.checkLoveOnline(response.data.data);
+    });
+    this.getLoveNumber(this.user);
+  },
   computed: {
-    user() {
-      return this.$store.state.user;
+    ...mapState({
+      user: state => state.user
+    })
+  },
+  methods: {
+    getLoveInfo(user) {
+      return new Promise((reslove, reject) => {
+        axios({
+          method: "get",
+          url: "/love/getLoveInfo",
+          params: {
+            userId: user.userId
+          }
+        })
+          .then(response => {
+            if (Object.is(response.data.statu, "success")) {
+              this.$store.commit("changeLoveUser", response.data.data);
+            } else {
+              this.$store.commit("changeLoveUser", {});
+            }
+            reslove(response);
+          })
+          .catch(error => {
+            reject(error);
+          });
+      });
+    },
+    checkLoveOnline(loveUser) {
+      return new Promise((resolve, reject) => {
+        axios({
+          method: "get",
+          url: "/love/checkLoveOnline",
+          params: {
+            userId: loveUser.userId
+          }
+        })
+          .then(response => {
+            if (Object.is(response.data.statu, "success")) {
+              this.$store.commit("changeLoveUserOnline", true);
+              resolve(true);
+            } else {
+              this.$store.commit("changeLoveUserOnline", false);
+              resolve(false);
+            }
+          })
+          .catch(error => {
+            reject(error);
+          });
+      });
+    },
+    getLoveNumber(user) {
+      return new Promise((reslove, reject) => {
+        axios({
+          method: "get",
+          url: "/love/getLoveNumber",
+          params: {
+            userId: user.userId
+          }
+        })
+          .then(response => {
+            if (Object.is(response.data.statu, "success")) {
+              this.$store.commit("changeLoveNumber", response.data.data);
+              reslove();
+            }
+          })
+          .catch(error => {
+            reject(error);
+          });
+      });
     }
   },
   components: {
-    weather
+    weather,
+    showStatus
   }
 };
 </script>
@@ -65,7 +143,8 @@ export default {
 }
 .head {
   background-color: white;
-  border-bottom: 1px solid #DCDFE6;
+  border-bottom: 1px solid #dcdfe6;
+  display: flex;
 }
 .head_div {
   height: 100%;
@@ -81,7 +160,7 @@ export default {
   font-size: 1rem;
   margin-left: 0.2rem;
   margin-top: auto;
-  margin-bottom: auto
+  margin-bottom: auto;
 }
 .el-row {
   width: 100%;
