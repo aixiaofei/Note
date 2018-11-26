@@ -42,7 +42,7 @@ router.beforeEach((to, from, next) => {
     url: "/checkPermission",
   }).then(response => {
     if (response.data.code == "200") {
-      if(to.path == "/" || to.path == "/register"){
+      if (to.path == "/" || to.path == "/register") {
         next("/love")
         return
       }
@@ -62,6 +62,10 @@ router.beforeEach((to, from, next) => {
     }
   }).catch(error => {
     Message.error({ 'message': "未知错误", 'center': true })
+    if (to.path == "/") {
+      next()
+      return
+    }
     next("/")
     return
   })

@@ -1,8 +1,13 @@
 import { mapState, mapMutations } from "vuex";
 const BASE_URL = "/api";
 
+const FILE_BUCKET = "lovepicture-1257159905"
+const FILE_REGION = "ap-shanghai"
+
 export default {
   BASE_URL,
+  FILE_BUCKET,
+  FILE_REGION,
   //格式化时间
   dateFtt(fmt, date) {
     var o = {
