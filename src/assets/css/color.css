@@ -1,6 +1,12 @@
-.bule_color {
+.bule_background_color {
     background-color: #409EFF
 }
+.red_background_color {
+    background: #F56C6C
+}
+.bule_color {
+    color: #409EFF
+}
 .red_color {
-    background-color: #F56C6C
+    color: #F56C6C
 }

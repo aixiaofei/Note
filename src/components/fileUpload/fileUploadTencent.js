@@ -1,28 +1,35 @@
-import COS from "cos-nodejs-sdk-v5"
-import axios from "axios";
+import COS from "cos-js-sdk-v5"
+import axios from '@/components/global/axios'
 import globalData from '@/components/global/global'
 const fileUpload = class fileUpload {
-    static upload(fileContent, url, key) {
-        let cos = new COS({
-            SecretId: 'AKIDe8PRElg3nHVS9auiPULyLUO3ShpuIkW6',
-            SecretKey: 'VlmY5NDpDMHxOaWDfsrb6OQDj01lLgss',
-            FileParallelLimit: 6,    // 控制文件上传并发数
-            ChunkParallelLimit: 6,   // 控制单个文件下分片上传并发数，在同园区上传可以设置较大的并发数
-            ChunkSize: 1024 * 1024 * 8,  // 控制分片大小，单位 B，在同园区上传可以设置较大的分片大小
+    static upload(fileContent, key) {
+        var cos = new COS({
+            getAuthorization: function (options, callback) {
+                axios.post("/common/getFileSignTencent", {
+                    key: key,
+                    type: "0"
+                }).then((response) => {
+                    if (response.flag) {
+                        callback({
+                            Authorization: response.data.data
+                        })
+                    }
+                }).catch(error => {
+                    console.log(error);
+                })
+            },
         });
 
         cos.putObject({
-            Bucket: "lovepicture-1257159905",
-            Region: "ap-shanghai",
+            Bucket: globalData.FILE_BUCKET,
+            Region: globalData.FILE_REGION,
             Key: key,
-            Body: url,
+            Body: fileContent.file,
             onProgress: function (progressData) {
-                debugger
-                fileContent.onProgress(progressData);
+                fileContent.onProgress({ percent: progressData.percent * 100 });
             },
         }, function (err, data) {
             if (err) {
-                debugger
                 console.log(err);
                 fileContent.onError(err);
             } else {

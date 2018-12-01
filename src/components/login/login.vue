@@ -1,25 +1,52 @@
 <template>
   <div class="parent_div">
-    <el-card shadow="shadow" class="card">
-      <el-form ref="form" :model="form" :rules="rules" status-icon>
+    <el-card
+      shadow="shadow"
+      class="card"
+    >
+      <el-form
+        ref="form"
+        :model="form"
+        :rules="rules"
+        status-icon
+      >
         <el-form-item class="title">
           <i class="icon iconfont icon-heart main_icon"></i>
         </el-form-item>
         <el-form-item prop="name">
-          <el-input placeholder="请输入用户名" v-model="form.name">
-            <i slot="prefix" class="icon iconfont icon-account"></i>
+          <el-input
+            placeholder="请输入用户名"
+            v-model="form.name"
+          >
+            <i
+              slot="prefix"
+              class="icon iconfont icon-account"
+            ></i>
           </el-input>
         </el-form-item>
         <el-form-item prop="password">
-          <el-input type="password" placeholder="请输入密码" v-model="form.password">
-            <i slot="prefix" class="icon iconfont icon-password"></i>
+          <el-input
+            type="password"
+            placeholder="请输入密码"
+            v-model="form.password"
+          >
+            <i
+              slot="prefix"
+              class="icon iconfont icon-password"
+            ></i>
           </el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit('form')">登录</el-button>
+          <el-button
+            type="primary"
+            @click="onSubmit('form')"
+          >登录</el-button>
         </el-form-item>
         <el-form-item class="register">
-          <span style="color: #409EFF;cursor: pointer" @click="goRegister">注册新账号</span>
+          <span
+            style="color: #409EFF;cursor: pointer"
+            @click="goRegister"
+          >注册新账号</span>
         </el-form-item>
       </el-form>
     </el-card>
@@ -72,12 +99,18 @@ export default {
       this.$refs[form].validate(valid => {
         if (valid) {
           let now = this.GLOBAL.dateFtt("yyyy-MM-dd hh:mm:ss", new Date());
-          let lastLoginIp = returnCitySN["cip"];
-          let lastLoginAddress = returnCitySN["cname"];
-          axios({
-            method: "post",
-            url: "/login/goLogin",
-            data: {
+          let returnCitySN;
+          let lastLoginIp;
+          let lastLoginAddress;
+          if(returnCitySN != undefined) {
+            lastLoginIp = returnCitySN["cip"];
+            lastLoginAddress = returnCitySN["cname"];
+          }else {
+            lastLoginIp = "";
+            lastLoginAddress = "";
+          }
+          this.$http
+            .post("/login/goLogin", {
               userName: this.form.name,
               password: Base64.encode(
                 this.form.name + "," + this.form.password
@@ -85,20 +118,27 @@ export default {
               lastLoginTime: now,
               lastLoginIp: lastLoginIp,
               lastLoginAddress: lastLoginAddress
-            }
-          })
+            })
             .then(response => {
-              if(response.data.code == "201"){
+              if (response.data.code == "203") {
                 this.$router.push("/love");
-                return false;
               }
-              if (response.data.statu === "success") {
+              if (response.flag) {
                 this.$message({
                   message: response.data.msg,
                   type: "success",
                   center: true
                 });
                 this.$store.commit("changeUser", response.data.data);
+
+                this.getLoveInfo(response.data.data)
+                  .then(response => {
+                    this.checkLoveOnline(response.data.data);
+                  })
+                  .catch(error => {
+                    console.log(error);
+                  });
+
                 this.$router.push("/love");
               } else {
                 this.$message({
@@ -106,7 +146,6 @@ export default {
                   type: "warning",
                   center: true
                 });
-                return false;
               }
             })
             .catch(error => {
@@ -115,17 +154,48 @@ export default {
                 type: "error",
                 center: true
               });
-              return false;
             });
-        } else {
-          console.log("error submit!!");
-          return false;
         }
       });
     },
     goRegister() {
       this.$router.push("/register");
-    }
+    },
+    getLoveInfo(user) {
+      return new Promise((reslove, reject) => {
+        this.$http
+          .get("/love/getLoveInfo", {
+            userId: user.userId
+          })
+          .then(response => {
+            if (response.flag) {
+              this.$store.commit("changeLoveUser", response.data.data);
+            } else {
+              this.$store.commit("changeLoveUser", {});
+            }
+            reslove(response);
+          })
+          .catch(error => {
+            reject(error);
+          });
+      });
+    },
+    checkLoveOnline(loveUser) {
+      this.$http
+        .get("/love/checkLoveOnline", {
+          userId: loveUser.userId
+        })
+        .then(response => {
+          if (response.flag) {
+            this.$store.commit("changeLoveUserOnline", true);
+          } else {
+            this.$store.commit("changeLoveUserOnline", false);
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
   }
 };
 </script>

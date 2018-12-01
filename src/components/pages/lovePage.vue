@@ -23,11 +23,11 @@
         </el-row>
       </el-header>
       <el-container>
-        <el-aside width="20rem">
-          <showStatus style="margin-top:2rem;margin-left:1.5rem"></showStatus>
-          <weather style="margin-top:2rem;margin-left:1.5rem"></weather>
+        <el-aside width="17%">
+          <showStatus style="margin-top:2rem;margin-left:1rem"></showStatus>
+          <weather style="margin-top:2rem;margin-left:1rem"></weather>
         </el-aside>
-        <el-main style="margin-top:1rem">
+        <el-main>
           <router-view></router-view>
         </el-main>
       </el-container>
@@ -49,9 +49,6 @@ export default {
   },
   created() {
     this.$initSoket();
-    this.getLoveInfo(this.user).then(response => {
-      this.checkLoveOnline(response.data.data);
-    });
     this.getLoveNumber(this.user);
   },
   computed: {
@@ -60,70 +57,19 @@ export default {
     })
   },
   methods: {
-    getLoveInfo(user) {
-      return new Promise((reslove, reject) => {
-        axios({
-          method: "get",
-          url: "/love/getLoveInfo",
-          params: {
-            userId: user.userId
-          }
-        })
-          .then(response => {
-            if (Object.is(response.data.statu, "success")) {
-              this.$store.commit("changeLoveUser", response.data.data);
-            } else {
-              this.$store.commit("changeLoveUser", {});
-            }
-            reslove(response);
-          })
-          .catch(error => {
-            reject(error);
-          });
-      });
-    },
-    checkLoveOnline(loveUser) {
-      return new Promise((resolve, reject) => {
-        axios({
-          method: "get",
-          url: "/love/checkLoveOnline",
-          params: {
-            userId: loveUser.userId
-          }
-        })
-          .then(response => {
-            if (Object.is(response.data.statu, "success")) {
-              this.$store.commit("changeLoveUserOnline", true);
-              resolve(true);
-            } else {
-              this.$store.commit("changeLoveUserOnline", false);
-              resolve(false);
-            }
-          })
-          .catch(error => {
-            reject(error);
-          });
-      });
-    },
     getLoveNumber(user) {
-      return new Promise((reslove, reject) => {
-        axios({
-          method: "get",
-          url: "/love/getLoveNumber",
-          params: {
-            userId: user.userId
+      this.$http
+        .get("/love/getLoveNumber", {
+          userId: user.userId
+        })
+        .then(response => {
+          if (response.flag) {
+            this.$store.commit("changeLoveNumber", response.data.data);
           }
         })
-          .then(response => {
-            if (Object.is(response.data.statu, "success")) {
-              this.$store.commit("changeLoveNumber", response.data.data);
-              reslove();
-            }
-          })
-          .catch(error => {
-            reject(error);
-          });
-      });
+        .catch(error => {
+          reject(error);
+        });
     }
   },
   components: {

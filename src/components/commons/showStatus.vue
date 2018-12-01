@@ -9,7 +9,7 @@
       </div>
       <div class="card_body">
         <el-badge v-if="!user.single" :value="myloveNumber" class="item card_item" type="info">
-          <el-button :class="getMyColor" size="small">爱值</el-button>
+          <el-button :class="getBackgroundColor(user)" size="small">爱值</el-button>
         </el-badge>
         <el-rate allow-half disabled class="card_item" :max=6 v-if="!user.single" v-model="myloveNumber" :icon-classes="['icon iconfont icon-love', 'icon iconfont icon-love', 'icon iconfont icon-love']" disabled-void-icon-class="icon iconfont icon-love" disabled-void-color="#909399" :low-threshold=2 :high-threshold=4 :colors="['#409EFF', '#67C23A', '#F56C6C']">
         </el-rate>
@@ -28,7 +28,7 @@
         </div>
       <div class="card_body">
         <el-badge v-if="!user.single" :value="loveNumber" class="item card_item" type="info">
-          <el-button :class="getLoveColor" size="small">爱值</el-button>
+          <el-button :class="getBackgroundColor(loveUser)" size="small">爱值</el-button>
         </el-badge>
         <el-rate allow-half disabled class="card_item" :max=6 v-if="!user.single" v-model="loveNumber" :icon-classes="['icon iconfont icon-love', 'icon iconfont icon-love', 'icon iconfont icon-love']" disabled-void-icon-class="icon iconfont icon-love" disabled-void-color="#909399" :low-threshold=2 :high-threshold=4 :colors="['#409EFF', '#67C23A', '#F56C6C']">
         </el-rate>

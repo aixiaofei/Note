@@ -23,7 +23,6 @@ const router = new Router({
     },
     {
       path: '/love',
-      name: 'love',
       component: lovePage,
       children: [
         {
@@ -41,7 +40,7 @@ router.beforeEach((to, from, next) => {
     method: "get",
     url: "/checkPermission",
   }).then(response => {
-    if (response.data.code == "200") {
+    if (response.data.code == "203") {
       if (to.path == "/" || to.path == "/register") {
         next("/love")
         return

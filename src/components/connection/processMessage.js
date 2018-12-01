@@ -4,12 +4,17 @@ import store from "@/vuex/store";
 
 const connection = {
     socket: null,
+    heart: null,
+    recovery: null,
     openSocket(socket, event) {
         this.socket = socket;
-        setInterval(() => method.sendHeart(this.socket), 5000);
+        this.heart = setInterval(() => method.sendHeart(this.socket), 5000);
     },
     closeSocket(event) {
-        
+        if(this.heart != null) {
+            clearInterval(this.heart);
+            this.heart = null;
+        }
     },
     processSocketMessage(data) {
         let message = JSON.parse(data.data);
@@ -22,6 +27,9 @@ const connection = {
             store.commit("changeLoveUserOnline", true);
         }else if(message.code == 2) {
             store.commit("changeLoveUserOnline", false);
+        }else if(message.code == 3) {
+            console.log("session会话失效");
+            this.socket.close();
         }
     }
 }

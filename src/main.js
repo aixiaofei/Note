@@ -13,9 +13,11 @@ import connection from '@/components/connection/connection'
 import processMessage from '@/components/connection/processMessage'
 import iView from 'iview';
 import 'iview/dist/styles/iview.css';
+import http from '@/components/global/axios'
 
 Vue.config.productionTip = false
 Vue.prototype.GLOBAL = globalData
+Vue.prototype.$http = http
 Vue.use(ElementUI);
 Vue.use(iView);
 axios.defaults.baseURL = globalData.BASE_URL
