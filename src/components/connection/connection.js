@@ -7,11 +7,12 @@ export default {
     var recovery = null;
     var repeatNum = 0;
     var socket = null;
+    const maxRepeatNum = 10;
 
     Vue.prototype.$socket = socket;
 
     Vue.prototype.$initSoket = init;
-    
+
     function init() {
       if ('WebSocket' in window) {
         socket = new WebSocket(`ws://${WS_URL}`);
@@ -33,13 +34,7 @@ export default {
         console.log(event.code + "," + event.reason + "," + event.wasClean);
         console.log("关闭连接");
         if (event.code != 1000 && event.code != 1001) {
-          if (repeatNum > 10) {
-            if (recovery != null) {
-              clearInterval(recovery);
-              recovery = null;
-            }
-            console.log("失联");
-          } else if (recovery == null) {
+          if (recovery == null) {
             console.log("启用恢复程序");
             recovery = setInterval(() => repeatLink(), 5000);
           }
@@ -55,7 +50,7 @@ export default {
 
     function repeatLink() {
       repeatNum++;
-      if(repeatNum > 10) {
+      if (repeatNum > maxRepeatNum) {
         if (recovery != null) {
           clearInterval(recovery);
           recovery = null;

@@ -152,6 +152,7 @@
 </template>
 
 <script>
+import { Base64 } from "js-base64";
   import {
     mapState,
     mapMutations
@@ -355,7 +356,14 @@
         let carousel = this.$refs.imgCarousel;
         index = carousel[id].activeIndex;
         let file = this.loveLittle[id].fileInfo[index];
-        window.open(this.netpre + file.fileUrl);
+        let eleLink = document.createElement('a');
+        eleLink.download = file.fileName;
+        eleLink.style.display = 'none';
+        let bugUrl = file.fileUrl.split('/')
+        eleLink.href = this.GLOBAL.PIC_URL + '/' + bugUrl[bugUrl.length-1];
+        document.body.appendChild(eleLink);
+        eleLink.click();
+        document.body.removeChild(eleLink);
       },
       responseLittle(id, action) {
         id = this.loveLittle[id].littleId;
@@ -473,29 +481,27 @@
         let fileName = item.file.name.split(".");
         let index = fileName[fileName.length - 1];
         let key =
-          "/" +
           this.user.userName +
           " " +
           fileName[0] +
           " " +
-          this.GLOBAL.dateFtt("yyyy-MM-dd hh:mm:ss", new Date()) +
-          "." +
-          index;
+          this.GLOBAL.dateFtt("yyyy-MM-dd hh:mm:ss", new Date());
+        key = "/" +Base64.encode(key) + "." + index;
         fileUpload.upload(item, key);
       },
       uploadSuccess(response, file, fileList) {
         let fileName = file.name.split(".");
         let index = fileName[fileName.length - 1];
+        let key =
+          this.user.userName +
+          " " +
+          fileName[0] +
+          " " +
+          this.GLOBAL.dateFtt("yyyy-MM-dd hh:mm:ss", new Date());
+        key = "/" +Base64.encode(key) + "." + index;
         this.uploadData.file.push({
           name: file.name,
-          key: "/" +
-            this.user.userName +
-            " " +
-            fileName[0] +
-            " " +
-            this.GLOBAL.dateFtt("yyyy-MM-dd hh:mm:ss", new Date()) +
-            "." +
-            index,
+          key: key,
           url: response.Location
         });
         this.completeNum++;
@@ -571,6 +577,7 @@
       }
     }
   };
+
 </script>
 
 <style scoped>
@@ -701,4 +708,5 @@
       top: 2.4rem;
     }
   }
+
 </style>
