@@ -156,7 +156,7 @@ export default {
               } else {
                 this.$message({
                   message: response.data.msg,
-                  type: "warning",
+                  type: "error",
                   center: true
                 });
                 return false;

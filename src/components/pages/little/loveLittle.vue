@@ -57,7 +57,7 @@
                 <el-button icon="el-icon-download" circle @click="downloadPic(id)"></el-button>
               </el-tooltip>
               <el-tooltip effect="light" content="删除图片" :hide-after="1000" placement="right">
-                <el-button icon="el-icon-delete" circle></el-button>
+                <el-button icon="el-icon-delete" circle @click="deletePic(id)"></el-button>
               </el-tooltip>
             </div>
             <div slot="reference">
@@ -83,7 +83,7 @@
           <div v-if="item.foundUserId == loveUser.userId">
             <div v-if="item.status == 0">
               <el-button class="accept_btn" type="primary" size="small" @click="responseLittle(id, 0)">{{item.type==0?'奖励宝宝':'含泪接受'}}</el-button>
-              <el-button class="reject_btn" type="danger" size="small" @click="responseLittle(id, 1)">{{item.type==0?'残忍拒绝':'奋力反抗'}}</el-button>
+              <el-button style="margin-left: 0" class="reject_btn" type="danger" size="small" @click="responseLittle(id, 1)">{{item.type==0?'残忍拒绝':'奋力反抗'}}</el-button>
             </div>
             <div v-else>
               <i v-if="item.result == 0" class="icon iconfont icon-yipizhun result bule_color" />
@@ -152,7 +152,9 @@
 </template>
 
 <script>
-import { Base64 } from "js-base64";
+  import {
+    Base64
+  } from "js-base64";
   import {
     mapState,
     mapMutations
@@ -312,7 +314,7 @@ import { Base64 } from "js-base64";
                 reslove();
               } else {
                 this.$message({
-                  message: "查询失败",
+                  message: response.data.msg,
                   type: "error",
                   center: true
                 });
@@ -360,10 +362,47 @@ import { Base64 } from "js-base64";
         eleLink.download = file.fileName;
         eleLink.style.display = 'none';
         let bugUrl = file.fileUrl.split('/')
-        eleLink.href = this.GLOBAL.PIC_URL + '/' + bugUrl[bugUrl.length-1];
+        eleLink.href = this.GLOBAL.PIC_URL + '/' + bugUrl[bugUrl.length - 1];
         document.body.appendChild(eleLink);
         eleLink.click();
         document.body.removeChild(eleLink);
+      },
+      deletePic(id) {
+        let index = this.emptyArr[id];
+        let carousel = this.$refs.imgCarousel;
+        index = carousel[id].activeIndex;
+        let file = this.loveLittle[id].fileInfo[index];
+        this.$confirm("确认删除图片?", '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.flesh = true;
+          this.$http.get("/love/deleteLittleFile", {
+            id: this.loveLittle[id].littleId,
+            key: file.fileKey
+          }).then(response => {
+            if (response.flag) {
+              this.$notify({
+                title: '系统通知',
+                message: response.data.msg,
+                type: 'success',
+                position: 'bottom-right'
+              });
+              this.flesh = false;
+              this.getLoveLittleList();
+            }
+          }).catch(error => {
+            this.$notify({
+              title: '系统通知',
+              message: '图片删除失败',
+              type: 'error',
+              position: 'bottom-right'
+            });
+            this.flesh = false;
+            this.getLoveLittleList();
+          })
+        }).catch(error => {});
       },
       responseLittle(id, action) {
         id = this.loveLittle[id].littleId;
@@ -385,16 +424,11 @@ import { Base64 } from "js-base64";
             })
             .then(response => {
               if (response.flag) {
-                this.$message({
+                this.$notify({
+                  title: '系统通知',
                   message: response.data.msg,
-                  type: "success",
-                  center: true
-                });
-              } else {
-                this.$message({
-                  message: "更新失败",
-                  type: "error",
-                  center: true
+                  type: 'success',
+                  position: 'bottom-right'
                 });
               }
               if (action == 0) {
@@ -403,10 +437,11 @@ import { Base64 } from "js-base64";
               this.getLoveLittleList();
             })
             .catch(error => {
-              this.$message({
-                message: "操作异常",
-                type: "error",
-                center: true
+              this.$notify({
+                title: '系统通知',
+                message: "更新失败",
+                type: 'error',
+                position: 'bottom-right'
               });
             });
         }).catch(error => {})
@@ -486,7 +521,7 @@ import { Base64 } from "js-base64";
           fileName[0] +
           " " +
           this.GLOBAL.dateFtt("yyyy-MM-dd hh:mm:ss", new Date());
-        key = "/" +Base64.encode(key) + "." + index;
+        key = "/" + Base64.encode(key) + "." + index;
         fileUpload.upload(item, key);
       },
       uploadSuccess(response, file, fileList) {
@@ -498,7 +533,7 @@ import { Base64 } from "js-base64";
           fileName[0] +
           " " +
           this.GLOBAL.dateFtt("yyyy-MM-dd hh:mm:ss", new Date());
-        key = "/" +Base64.encode(key) + "." + index;
+        key = "/" + Base64.encode(key) + "." + index;
         this.uploadData.file.push({
           name: file.name,
           key: key,
@@ -546,16 +581,11 @@ import { Base64 } from "js-base64";
               .post("/love/saveLoveLittle", this.loveLittleForm)
               .then(response => {
                 if (response.flag) {
-                  this.$message({
+                  this.$notify({
+                    title: '系统通知',
                     message: response.data.msg,
-                    type: "success",
-                    center: true
-                  });
-                } else {
-                  this.$message({
-                    message: response.data.msg,
-                    type: "warning",
-                    center: true
+                    type: 'success',
+                    position: 'bottom-right'
                   });
                 }
                 this.loading = false;
@@ -563,11 +593,12 @@ import { Base64 } from "js-base64";
                 this.getLoveLittleList();
               })
               .catch(error => {
-                this.$message({
-                  message: "发生错误",
-                  type: "error",
-                  center: true
-                });
+                this.$notify({
+                    title: '系统通知',
+                    message: "保存失败",
+                    type: 'error',
+                    position: 'bottom-right'
+                  });
                 this.loading = false;
                 this.closeDialog();
                 this.getLoveLittleList();
@@ -624,12 +655,12 @@ import { Base64 } from "js-base64";
 
   .accept_btn {
     float: left;
+    margin-left: 0;
     margin-top: 0.2rem;
   }
 
   .reject_btn {
     float: left;
-    margin-left: 0;
     margin-top: 1rem;
   }
 

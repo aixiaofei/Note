@@ -133,17 +133,17 @@ export default {
 
                 this.getLoveInfo(response.data.data)
                   .then(response => {
-                    this.checkLoveOnline(response.data.data);
+                    this.checkLoveOnline(response.data.data).then(response => {
+                      this.$router.push("/love");
+                    })
                   })
                   .catch(error => {
                     console.log(error);
                   });
-
-                this.$router.push("/love");
               } else {
                 this.$message({
                   message: response.data.msg,
-                  type: "warning",
+                  type: "error",
                   center: true
                 });
               }
@@ -181,7 +181,8 @@ export default {
       });
     },
     checkLoveOnline(loveUser) {
-      this.$http
+      return new Promise((reslove, reject) => {
+        this.$http
         .get("/love/checkLoveOnline", {
           userId: loveUser.userId
         })
@@ -191,10 +192,13 @@ export default {
           } else {
             this.$store.commit("changeLoveUserOnline", false);
           }
+          reslove();
         })
         .catch(error => {
           console.log(error);
+          reject(error);
         });
+      })
     },
   }
 };

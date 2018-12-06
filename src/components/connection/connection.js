@@ -1,8 +1,8 @@
 export default {
   install(Vue, options = {}) {
 
-    const WS_URL = "localhost:8081/connection";
-    const WSJS_URL = "localhost:8081/connectionSocketJs";
+    const WS_URL = process.env.NODE_ENV == "development"?"localhost/connection/connectionSocket": "39.108.152.46/connection/connectionSocket";
+    const WSJS_URL = process.env.NODE_ENV == "development"?"localhost/connection/connectionSocket": "39.108.152.46/connection/connectionSocketJs"
     const processMessage = options.processMessage;
     var recovery = null;
     var repeatNum = 0;

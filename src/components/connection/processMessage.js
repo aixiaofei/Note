@@ -19,7 +19,7 @@ const connection = {
     processSocketMessage(data) {
         let message = JSON.parse(data.data);
         Notification.info({
-            title: '消息',
+            title: '系统消息',
             message: message.data,
             position: 'bottom-right'
         });
