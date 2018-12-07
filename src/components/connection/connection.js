@@ -56,6 +56,7 @@ export default {
           recovery = null;
         }
         console.log("失联");
+        processMessage.closeSocket(event);
         return false;
       }
       console.log(`第${repeatNum}次重连`);

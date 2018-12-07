@@ -12,15 +12,18 @@ import globalData from '@/components/global/global'
 import '@/assets/css/color.css'
 import connection from '@/components/connection/connection'
 import processMessage from '@/components/connection/processMessage'
-import iView from 'iview';
-import 'iview/dist/styles/iview.css';
+import { Spin } from 'iview'
+import 'iview/dist/styles/iview.css'
+import { VAvatar } from 'vuetify/lib'
+import 'vuetify/src/stylus/app.styl'
 import http from '@/components/global/axios'
 
 Vue.config.productionTip = false
 Vue.prototype.GLOBAL = globalData
 Vue.prototype.$http = http
 Vue.use(ElementUI);
-Vue.use(iView);
+Vue.component('Spin', Spin)
+Vue.component('v-avatar', VAvatar)
 axios.defaults.baseURL = globalData.BASE_URL
 let strategies = Vue.config.optionMergeStrategies
 strategies.myOption = strategies.methods
@@ -33,7 +36,9 @@ new Vue({
   el: '#app',
   router,
   store,
-  components: { App },
+  components: {
+    App
+  },
   template: '<App/>',
   render: h => h(App)
 })

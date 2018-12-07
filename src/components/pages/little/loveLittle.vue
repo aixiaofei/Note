@@ -53,10 +53,10 @@
               </el-carousel-item>
             </el-carousel>
             <div class="img_opearation">
-              <el-tooltip effect="light" content="下载图片" :hide-after="1000" placement="left">
+              <el-tooltip effect="dark" content="下载图片" :hide-after="1000" placement="left">
                 <el-button icon="el-icon-download" circle @click="downloadPic(id)"></el-button>
               </el-tooltip>
-              <el-tooltip effect="light" content="删除图片" :hide-after="1000" placement="right">
+              <el-tooltip effect="dark" content="删除图片" :hide-after="1000" placement="right">
                 <el-button icon="el-icon-delete" circle @click="deletePic(id)"></el-button>
               </el-tooltip>
             </div>
@@ -378,9 +378,10 @@
           type: 'warning'
         }).then(() => {
           this.flesh = true;
-          this.$http.get("/love/deleteLittleFile", {
-            id: this.loveLittle[id].littleId,
-            key: file.fileKey
+          this.$http.post("/love/deleteLittleFile", {
+            fileSource: 0,
+            fileSourceId: this.loveLittle[id].littleId,
+            fileKey: file.fileKey
           }).then(response => {
             if (response.flag) {
               this.$notify({
