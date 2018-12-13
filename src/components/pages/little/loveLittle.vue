@@ -3,53 +3,62 @@
     <el-row>
       <el-col :span="24">
         <div style="float: left">
-          <el-button v-if="loading" type="primary" @click="showAddLoveLittle">正在保存中...<i class="el-icon-loading" /></el-button>
+          <el-button v-if="loading" type="primary" @click="showAddLoveLittle">正在保存中...<i class="el-icon-loading"/>
+          </el-button>
           <el-button v-else type="primary" @click="showAddLoveLittle">发布你的爱情点滴</el-button>
           <el-button type="primary" :loading="flesh" @click="getLoveLittleList">刷新</el-button>
         </div>
       </el-col>
     </el-row>
-    <div style="height: 2rem" v-if="flesh" v-loading="flesh" element-loading-background="rgba(255, 255, 255, 0.9)"></div>
+    <div style="height: 2rem" v-if="flesh" v-loading="flesh"
+         element-loading-background="rgba(255, 255, 255, 0.9)"></div>
     <div v-if="noLittle" style="margin-top: 2rem">
       暂无更多爱情点滴
     </div>
     <div v-for="(item, id) in loveLittle" style="margin-top: 2rem">
       <el-row>
         <el-col :span="1">
-          <i class="icon iconfont icon-love love_animation" style="font-size: 1rem" :class="getColor(item.foundUserId == user.userId? user : loveUser)" />
+          <i class="icon iconfont icon-love love_animation" style="font-size: 1rem"
+             :class="getColor(item.foundUserId == user.userId? user : loveUser)"/>
         </el-col>
         <el-col :span="3">
           <div>
-            <i class="icon iconfont icon-account little_icon" :class="getColor(item.foundUserId == user.userId? user : loveUser)" />
+            <i class="icon iconfont icon-account little_icon"
+               :class="getColor(item.foundUserId == user.userId? user : loveUser)"/>
             {{item.foundUserId == user.userId? user.userName : loveUser.userName}}
           </div>
           <div>
-            <i class="icon iconfont icon-fabu little_icon" :class="getColor(item.foundUserId == user.userId? user : loveUser)" />
+            <i class="icon iconfont icon-fabu little_icon"
+               :class="getColor(item.foundUserId == user.userId? user : loveUser)"/>
             {{item.createTime}}
           </div>
           <div>
-            <i class="icon iconfont icon-xiugai little_icon" :class="getColor(item.foundUserId == user.userId? user : loveUser)" />
+            <i class="icon iconfont icon-xiugai little_icon"
+               :class="getColor(item.foundUserId == user.userId? user : loveUser)"/>
             {{item.lastModifyTime}}
           </div>
         </el-col>
         <el-col :span="7">
           <div class="little_title">
-            <i class="icon iconfont icon-title little_icon" :class="getColor(item.foundUserId == user.userId? user : loveUser)" />
+            <i class="icon iconfont icon-title little_icon"
+               :class="getColor(item.foundUserId == user.userId? user : loveUser)"/>
             {{item.title}}
           </div>
           <div class="little_content">
-            <i class="icon iconfont icon-content little_icon" :class="getColor(item.foundUserId == user.userId? user : loveUser)" />
+            <i class="icon iconfont icon-content little_icon"
+               :class="getColor(item.foundUserId == user.userId? user : loveUser)"/>
             {{item.content}}
           </div>
         </el-col>
         <el-col :span="5">
           <div v-if="item.fileInfo.length == 0">
-            <i class="icon iconfont icon-nopic" style="font-size: 2rem;float: left" :class="getColor(item.foundUserId == user.userId? user : loveUser)" />
+            <i class="icon iconfont icon-nopic" style="font-size: 2rem;float: left"
+               :class="getColor(item.foundUserId == user.userId? user : loveUser)"/>
           </div>
           <el-popover v-else placement="left" width="500" trigger="click" :open-delay="100">
             <el-carousel :autoplay="false" ref="imgCarousel" indicator-position="none" arrow="hover">
               <el-carousel-item v-for="(show, index) in item.fileInfo" :key="index">
-                <img style="width: 100%; height: 100%" :src="netpre+show.fileUrl" />
+                <img style="width: 100%; height: 100%" :src="netpre+show.fileUrl" alt=""/>
               </el-carousel-item>
             </el-carousel>
             <div class="img_opearation">
@@ -62,7 +71,7 @@
             </div>
             <div slot="reference">
               <div v-for="(img, index) in item.fileInfo">
-                <img class="pre_img" :src="netpre+img.fileUrl" @mouseenter="setActiveItem(index, id)" />
+                <img class="pre_img" :src="netpre+img.fileUrl" @mouseenter="setActiveItem(index, id)" alt=""/>
               </div>
             </div>
           </el-popover>
@@ -71,33 +80,43 @@
           <el-rate disabled v-model="item.important" :colors="['#909399', '#409EFF', '#F56C6C']">
           </el-rate>
           <div class="lock">
-            <i class="icon iconfont icon-zhongyao little_icon" :class="getColor(item.foundUserId == user.userId? user : loveUser)" />
+            <i class="icon iconfont icon-zhongyao little_icon"
+               :class="getColor(item.foundUserId == user.userId? user : loveUser)"/>
             {{texts[item.important]}}
           </div>
-          <div class="lock" v-if="item.type == 0"><i class="icon iconfont icon-suoyao little_icon" :class="getColor(item.foundUserId == user.userId? user : loveUser)" />
-            {{item.foundUserId == user.userId? '我': loveUser.sex == 1? '他':'她'}}想向宝宝索要{{item.loveNumber}}爱值</div>
-          <div class="lock" v-else><i class="icon iconfont icon-fameijin little_icon" :class="getColor(item.foundUserId == user.userId? user : loveUser)" />
-            {{item.foundUserId == user.userId? '我': loveUser.sex == 1? '他':'她'}}想惩罚宝宝{{item.loveNumber}}爱值</div>
+          <div class="lock" v-if="item.type == 0"><i class="icon iconfont icon-suoyao little_icon"
+                                                     :class="getColor(item.foundUserId == user.userId? user : loveUser)"/>
+            {{item.foundUserId == user.userId? '我': loveUser.sex == 1? '他':'她'}}想向宝宝索要{{item.loveNumber}}爱值
+          </div>
+          <div class="lock" v-else><i class="icon iconfont icon-fameijin little_icon"
+                                      :class="getColor(item.foundUserId == user.userId? user : loveUser)"/>
+            {{item.foundUserId == user.userId? '我': loveUser.sex == 1? '他':'她'}}想惩罚宝宝{{item.loveNumber}}爱值
+          </div>
         </el-col>
         <el-col :span="2" :offset="1">
           <div v-if="item.foundUserId == loveUser.userId">
             <div v-if="item.status == 0">
-              <el-button class="accept_btn" type="primary" size="small" @click="responseLittle(id, 0)">{{item.type==0?'奖励宝宝':'含泪接受'}}</el-button>
-              <el-button style="margin-left: 0" class="reject_btn" type="danger" size="small" @click="responseLittle(id, 1)">{{item.type==0?'残忍拒绝':'奋力反抗'}}</el-button>
+              <el-button class="accept_btn" type="primary" size="small" @click="responseLittle(id, 0)">
+                {{item.type==0?'奖励宝宝':'含泪接受'}}
+              </el-button>
+              <el-button style="margin-left: 0" class="reject_btn" type="danger" size="small"
+                         @click="responseLittle(id, 1)">{{item.type==0?'残忍拒绝':'奋力反抗'}}
+              </el-button>
             </div>
             <div v-else>
-              <i v-if="item.result == 0" class="icon iconfont icon-yipizhun result bule_color" />
-              <i v-else class="icon iconfont icon-weipizhun result red_color" />
+              <i v-if="item.result == 0" class="icon iconfont icon-yipizhun result bule_color"/>
+              <i v-else class="icon iconfont icon-weipizhun result red_color"/>
             </div>
           </div>
           <div v-else>
             <div v-if="item.status == 0" style="float: left">
-              <i class="icon iconfont icon-hulve ignore" :class="getColor(item.foundUserId == user.userId? loveUser : user)" />
+              <i class="icon iconfont icon-hulve ignore"
+                 :class="getColor(item.foundUserId == user.userId? loveUser : user)"/>
               <div style="margin-top: 2.5rem">{{loveUser.sex == 1? '他':'她'}}还没有看</div>
             </div>
             <div v-else>
-              <i v-if="item.result == 0" class="icon iconfont icon-yipizhun result bule_color" />
-              <i v-else class="icon iconfont icon-weipizhun result red_color" />
+              <i v-if="item.result == 0" class="icon iconfont icon-yipizhun result bule_color"/>
+              <i v-else class="icon iconfont icon-weipizhun result red_color"/>
             </div>
           </div>
         </el-col>
@@ -106,15 +125,17 @@
     <div class="foot_load_div" v-loading="loadMore" element-loading-background="rgba(255, 255, 255, 0.9)">
       <el-button size="small" type="primary" @click="loadMoreLittle">加载更多</el-button>
     </div>
-    <el-dialog title="书写你的爱情点滴" :visible.sync="loveLittleFormVisible" :before-close="closeDialog" width="80%" :top="dialogTop">
+    <el-dialog title="书写你的爱情点滴" :visible.sync="loveLittleFormVisible" :before-close="closeDialog" width="80%"
+               :top="dialogTop">
       <Spin size="large" fix v-if="loading"></Spin>
       <el-form :model="loveLittleForm" ref="loveLittleForm" :rules="rules" status-icon>
         <el-form-item label="点滴标题:" :label-width="formLabelWidth" prop="title">
           <el-input v-model="loveLittleForm.title" autocomplete="off" clearable></el-input>
         </el-form-item>
         <el-form-item label="点滴内容:" :label-width="formLabelWidth" prop="content">
-          <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 6}" v-model="loveLittleForm.content" autocomplete="off"
-            clearable></el-input>
+          <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 6}" v-model="loveLittleForm.content"
+                    autocomplete="off"
+                    clearable></el-input>
         </el-form-item>
         <el-form-item label="点滴类型:" :label-width="formLabelWidth" style="text-align: left" prop="type">
           <el-select v-model="loveLittleForm.type" placeholder="请选择类型">
@@ -123,7 +144,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="分配爱值:" :label-width="formLabelWidth" style="text-align: left">
-          <el-input-number v-model="loveLittleForm.loveNumber" :min="-90" :max="90"></el-input-number>
+          <el-input-number v-model="loveLittleForm.loveNumber" :min="1" :max="90"></el-input-number>
         </el-form-item>
         <el-form-item label="重要程度:" :label-width="formLabelWidth" style="text-align: left">
           <div class="div_rate">
@@ -132,10 +153,13 @@
           </div>
         </el-form-item>
         <el-form-item label="上传点滴图片:" :label-width="formLabelWidth" style="text-align: left">
-          <el-upload action="" :http-request="uploadFile" :on-change="fileChange" :auto-upload="false" :on-error="uploadError"
-            :on-success="uploadSuccess" :accept="fileAccept" :multiple="true" :before-upload="fileBeforeUpload" :limit="9"
-            :on-exceed="fileExceed" :file-list="fileList" ref="upload" list-type="picture-card" :on-preview="fileIn"
-            :on-remove="fileRemove">
+          <el-upload action="" :http-request="uploadFile" :on-change="fileChange" :auto-upload="false"
+                     :on-error="uploadError"
+                     :on-success="uploadSuccess" :accept="fileAccept" :multiple="true" :before-upload="fileBeforeUpload"
+                     :limit="9"
+                     :on-exceed="fileExceed" :file-list="fileList" ref="upload" list-type="picture-card"
+                     :on-preview="fileIn"
+                     :on-remove="fileRemove">
             <i class="el-icon-plus"></i>
           </el-upload>
           <el-dialog :visible.sync="dialogVisible" :append-to-body="appendBody" :top="dialogTop">
@@ -156,11 +180,10 @@
     Base64
   } from "js-base64";
   import {
-    mapState,
-    mapMutations
+    mapState
   } from "vuex";
-  import axios from "axios";
   import fileUpload from "@/components/fileUpload/fileUploadTencent";
+
   export default {
     name: "loveLittle",
     created() {
@@ -185,9 +208,9 @@
         dialogTop: "2rem",
         appendBody: true,
         typeOptions: [{
-            value: 0,
-            label: "索要"
-          },
+          value: 0,
+          label: "索要"
+        },
           {
             value: 1,
             label: "惩罚"
@@ -221,10 +244,10 @@
         loading: false,
         rules: {
           title: [{
-              required: true,
-              message: "请输入标题",
-              trigger: "blur"
-            },
+            required: true,
+            message: "请输入标题",
+            trigger: "blur"
+          },
             {
               min: 3,
               max: 50,
@@ -301,11 +324,7 @@
                 if (this.loadMore) {
                   this.loveLittle = [...this.loveLittle, ...response.data.data];
                 }
-                if (this.loveLittle.length == 0) {
-                  this.noLittle = true;
-                } else {
-                  this.noLittle = false;
-                }
+                this.noLittle = this.loveLittle.length == 0;
                 this.$message({
                   message: response.data.msg,
                   type: "success",
@@ -403,7 +422,8 @@
             this.flesh = false;
             this.getLoveLittleList();
           })
-        }).catch(error => {});
+        }).catch(error => {
+        });
       },
       responseLittle(id, action) {
         id = this.loveLittle[id].littleId;
@@ -445,7 +465,8 @@
                 position: 'bottom-right'
               });
             });
-        }).catch(error => {})
+        }).catch(error => {
+        })
       },
       closeDialog(done) {
         if (!this.loading) {
@@ -488,7 +509,8 @@
         this.dialogImageUrl = file.url;
         this.dialogVisible = true;
       },
-      fileRemove(file, fileList) {},
+      fileRemove(file, fileList) {
+      },
       fileExceed(files, fileList) {
         this.$message({
           message: "最多上传9张图片",
@@ -512,7 +534,8 @@
           }
         }
       },
-      fileBeforeUpload(file) {},
+      fileBeforeUpload(file) {
+      },
       uploadFile(item) {
         let fileName = item.file.name.split(".");
         let index = fileName[fileName.length - 1];
@@ -523,7 +546,7 @@
           " " +
           this.GLOBAL.dateFtt("yyyy-MM-dd hh:mm:ss", new Date());
         key = "/" + Base64.encode(key) + "." + index;
-        fileUpload.upload(item, key);
+        fileUpload.upload(item, key, null);
       },
       uploadSuccess(response, file, fileList) {
         let fileName = file.name.split(".");
@@ -573,7 +596,8 @@
                 foundUserId: foundUserId
               };
               this.loveLittleForm = Object.assign(this.loveLittleForm, otherData);
-            } else {}
+            } else {
+            }
             this.loveLittleForm = Object.assign(
               this.loveLittleForm,
               this.uploadData
@@ -593,13 +617,13 @@
                 this.closeDialog();
                 this.getLoveLittleList();
               })
-              .catch(error => {
+              .catch(() => {
                 this.$notify({
-                    title: '系统通知',
-                    message: "保存失败",
-                    type: 'error',
-                    position: 'bottom-right'
-                  });
+                  title: '系统通知',
+                  message: "保存失败",
+                  type: 'error',
+                  position: 'bottom-right'
+                });
                 this.loading = false;
                 this.closeDialog();
                 this.getLoveLittleList();

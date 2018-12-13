@@ -6,18 +6,15 @@
           <i class="icon iconfont icon-find main_icon"></i>
         </el-form-item>
         <el-form-item prop="name">
-          <el-input placeholder="请输入用户名" v-model="form.name">
-            <i slot="prefix" class="icon iconfont icon-account"></i>
+          <el-input placeholder="请输入用户名" v-model="form.name" prefix-icon="icon iconfont icon-account">
           </el-input>
         </el-form-item>
         <el-form-item prop="password">
-          <el-input type="password" placeholder="请输入密码" v-model="form.password">
-            <i slot="prefix" class="icon iconfont icon-password"></i>
+          <el-input type="password" placeholder="请输入密码" v-model="form.password" prefix-icon="icon iconfont icon-password">
           </el-input>
         </el-form-item>
         <el-form-item prop="repeatPassword">
-          <el-input type="password" placeholder="请重复密码" v-model="form.repeatPassword">
-            <i slot="prefix" class="icon iconfont icon-repeat"></i>
+          <el-input type="password" placeholder="请重复密码" v-model="form.repeatPassword" prefix-icon="icon iconfont icon-repeat">
           </el-input>
         </el-form-item>
         <el-form-item prop="sex">
@@ -32,8 +29,7 @@
           </el-date-picker>
         </el-form-item>
         <el-form-item>
-          <el-input placeholder="请输入另一半的Love-Lock" v-model="form.loveLock">
-            <i slot="prefix" class="icon iconfont icon-love"></i>
+          <el-input placeholder="请输入另一半的Love-Lock" v-model="form.loveLock" prefix-icon="icon iconfont icon-love">
           </el-input>
         </el-form-item>
         <el-form-item>

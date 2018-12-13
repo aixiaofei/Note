@@ -32,12 +32,12 @@ const connection = {
             this.socket.close();
         }
     }
-}
+};
 
 const method = {
     sendHeart(socket) {
         socket.send(Message.produceHeart());
     }
-}
+};
 
 export default connection;

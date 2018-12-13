@@ -17,12 +17,13 @@ export default {
                 if(Object.is(response.data.statu, "success")){
                     response = Object.assign(response, {
                         flag: true
-                    })
+                    });
                     reslove(response);
                 }else{
                     reslove(response);
                 }
             }).catch(error => {
+                console.log(error);
                 reject(error);
             })
         })
@@ -43,13 +44,14 @@ export default {
                 if(Object.is(response.data.statu, "success")){
                     response = Object.assign(response, {
                         flag: true
-                    })
+                    });
                     reslove(response);
                 }else{
                     reslove(response);
                 }
             }).catch(error => {
-                reject(error);
+              console.log(error);
+              reject(error);
             })
         })
     }

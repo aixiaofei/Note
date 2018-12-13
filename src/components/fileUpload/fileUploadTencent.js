@@ -2,8 +2,8 @@ import COS from "cos-js-sdk-v5"
 import axios from '@/components/global/axios'
 import globalData from '@/components/global/global'
 const fileUpload = class fileUpload {
-    static upload(fileContent, key) {
-        var cos = new COS({
+    static upload(fileContent, key, progress) {
+        let cos = new COS({
             getAuthorization: function (options, callback) {
                 axios.post("/common/getFileSignTencent", {
                     key: key,
@@ -26,7 +26,11 @@ const fileUpload = class fileUpload {
             Key: key,
             Body: fileContent.file,
             onProgress: function (progressData) {
-                fileContent.onProgress({ percent: progressData.percent * 100 });
+                let percent = Math.round(progressData.percent * 100);
+                fileContent.onProgress({ percent: percent });
+                if(progress != null) {
+                  progress(percent)
+                }
             },
         }, function (err, data) {
             if (err) {

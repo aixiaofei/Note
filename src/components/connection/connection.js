@@ -28,7 +28,7 @@ export default {
           recovery = null;
         }
         console.log("连接成功");
-      }
+      };
       socket.onclose = function (event) {
         processMessage.closeSocket(event);
         console.log(event.code + "," + event.reason + "," + event.wasClean);
@@ -39,10 +39,10 @@ export default {
             recovery = setInterval(() => repeatLink(), 5000);
           }
         }
-      }
+      };
       socket.onmessage = function (event) {
         processMessage.processSocketMessage(event);
-      }
+      };
       socket.onerror = function (event) {
         console.log(event);
       }
@@ -65,7 +65,7 @@ export default {
 
     Vue.prototype.$sendSocketMessage = function (data) {
       socket.send(data);
-    }
+    };
 
     Vue.mixin({
       methods: {
