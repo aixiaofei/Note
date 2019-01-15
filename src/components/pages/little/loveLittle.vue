@@ -296,7 +296,7 @@
       }
     },
     watch: {
-      completeNum(newValue, oldValue) {
+      completeNum(newValue) {
         if (newValue == this.fileList.length) {
           this.addLoveLittle();
         }

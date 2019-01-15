@@ -22,9 +22,9 @@
           <i v-else-if="user.single" class="icon iconfont icon-gou"></i>
           <span v-if="!user.single">{{loveUser.userName}}</span>
           <span v-else>单身狗</span>
-          <transition name="el-fade-in-linear">
-            <i v-if="!user.single && loveUserOnline" class="el-icon-circle-check-outline online" style="margin-left: 0.5rem"></i>
-            <i v-else-if="!user.single && loveUserOnline" class="el-icon-circle-close-outline outline" style="margin-left: 0.5rem"></i>
+          <transition name="el-fade-in-linear" mode="out-in">
+            <i v-if="!user.single && loveUserOnline" class="el-icon-circle-check-outline online" style="margin-left: 0.5rem" key="online"></i>
+            <i v-else-if="!user.single && !loveUserOnline" class="el-icon-circle-close-outline outline" style="margin-left: 0.5rem" key="outline"></i>
           </transition>
         </div>
       <div class="card_body">

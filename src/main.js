@@ -4,11 +4,9 @@ import 'es6-promise/auto'
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import ElementUI from 'element-ui';
-import 'element-ui/lib/theme-chalk/index.css';
-import store from "@/vuex/store";
-import axios from 'axios'
-import globalData from '@/components/global/global'
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
+import store from '@/vuex/store'
 import '@/assets/css/color.css'
 import connection from '@/components/connection/connection'
 import processMessage from '@/components/connection/processMessage'
@@ -16,16 +14,12 @@ import { Spin } from 'iview'
 import 'iview/dist/styles/iview.css'
 import { VAvatar } from 'vuetify/lib'
 import 'vuetify/src/stylus/app.styl'
-import http from '@/components/global/axios'
 
 Vue.config.productionTip = false
-Vue.prototype.GLOBAL = globalData
-Vue.prototype.$http = http
-Vue.use(ElementUI);
+Vue.use(ElementUI)
 Vue.component('Spin', Spin)
 Vue.component('v-avatar', VAvatar)
-axios.defaults.baseURL = globalData.BASE_URL
-let strategies = Vue.config.optionMergeStrategies
+const strategies = Vue.config.optionMergeStrategies
 strategies.myOption = strategies.methods
 Vue.use(connection, {
   processMessage: processMessage

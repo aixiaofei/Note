@@ -1,10 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Login from '@/components/login/login'
-import Register from '@/components/login/register'
-import lovePage from '@/components/pages/lovePage'
-import loveContent from '@/components/pages/loveContent'
-import axios from "axios"
+import axios from 'axios'
 import { Message } from 'element-ui'
 
 Vue.use(Router)
@@ -14,59 +10,52 @@ const router = new Router({
     {
       path: '/',
       name: 'Login',
-      component: Login
+      component: () => import('@/components/login/login')
     },
     {
       path: '/register',
       name: 'Register',
-      component: Register
+      component: () => import('@/components/login/register')
     },
     {
       path: '/love',
-      component: lovePage,
+      component: () => import('@/components/pages/lovePage'),
       children: [
         {
-          path: "/",
-          name: "loveContent",
-          component: loveContent
+          path: '/',
+          name: 'loveContent',
+          component: () => import('@/components/pages/loveContent')
         }
       ]
     }
   ]
 })
 
+const whiteList = ['/register']
+
 router.beforeEach((to, from, next) => {
+  if (whiteList.includes(to.path)) next()
   axios({
-    method: "get",
-    url: "/checkPermission",
+    method: 'get',
+    url: '/checkPermission'
   }).then(response => {
-    if (response.data.code == "203") {
-      if (to.path == "/" || to.path == "/register") {
-        next("/love")
-        return
+    if (Object.is(response.data.code, '203')) {
+      if (['/'].includes(to.path)) {
+        next('/love')
       }
       next()
-      return
-    } else if (response.data.code == "201") {
-      if (to.path == "/" || to.path == "/register") {
+    } else if (Object.is(response.data.code, '201')) {
+      if (['/'].includes(to.path)) {
         next()
-        return
       }
-      next("/")
-      return
-    } else if (response.data.code == "202") {
+      next('/')
+    } else if (Object.is(response.data.code, '202')) {
       Message.error({ 'message': response.data.msg, 'center': true })
-      next("/")
-      return
+      next('/')
     }
-  }).catch(error => {
-    Message.error({ 'message': "未知错误", 'center': true })
-    if (to.path == "/") {
-      next()
-      return
-    }
-    next("/")
-    return
+  }).catch(() => {
+    Message.error({ 'message': '未知错误', 'center': true })
+    next('/')
   })
 })
 
