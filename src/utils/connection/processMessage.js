@@ -1,4 +1,4 @@
-import Message from '@/components/connection/message'
+import Message from '@/utils/connection/message'
 import { Notification } from 'element-ui'
 import store from '@/vuex/store'
 

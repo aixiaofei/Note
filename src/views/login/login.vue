@@ -1,53 +1,26 @@
 <template>
   <div class="parent_div">
-    <el-card
-      shadow="shadow"
-      class="card"
-    >
-      <el-form
-        ref="form"
-        :model="form"
-        :rules="rules"
-        status-icon
-      >
+    <el-card shadow="shadow" class="card">
+      <el-form ref="form" :model="form" :rules="rules" status-icon>
         <el-form-item class="title">
           <i class="icon iconfont icon-heart main_icon"/>
         </el-form-item>
         <el-form-item prop="name">
-          <el-input
-            v-model="form.name"
-            placeholder="请输入用户名"
-          >
-            <i
-              slot="prefix"
-              class="icon iconfont icon-account"
-            />
+          <el-input v-model="form.name" placeholder="请输入用户名">
+            <i slot="prefix" class="icon iconfont icon-account"/>
           </el-input>
         </el-form-item>
         <el-form-item prop="password">
-          <el-input
-            v-model="form.password"
-            type="password"
-            placeholder="请输入密码"
-          >
-            <i
-              slot="prefix"
-              class="icon iconfont icon-password"
-            />
+          <el-input v-model="form.password" type="password" placeholder="请输入密码">
+            <i slot="prefix" class="icon iconfont icon-password"/>
           </el-input>
         </el-form-item>
-        <el-form-item>
-          <el-button
-            type="primary"
-            @click="onSubmit('form')"
-          >登录
+        <el-form-item style="margin-bottom: 5px">
+          <el-button type="primary" @click="onSubmit('form')">登录
           </el-button>
         </el-form-item>
         <el-form-item class="register">
-          <span
-            style="color: #409EFF;cursor: pointer"
-            @click="goRegister"
-          >注册新账号</span>
+          <span style="color: #409EFF; cursor: pointer" @click="goRegister">注册新账号</span>
         </el-form-item>
       </el-form>
     </el-card>
@@ -99,55 +72,48 @@ export default {
     onSubmit: function(form) {
       this.$refs[form].validate(valid => {
         if (valid) {
-          const now = this.GLOBAL.dateFtt('yyyy-MM-dd hh:mm:ss', new Date())
+          const now = this.GLOBAL.dateFtt(new Date(), 'YYYY-MM-DD HH:mm:ss')
           const lastLoginIp = returnCitySN['cip']
           const lastLoginAddress = returnCitySN['cname']
-          this.$http
-            .post('/login/goLogin', {
-              userName: this.form.name,
-              password: Base64.encode(
-                this.form.name + ',' + this.form.password
-              ),
-              lastLoginTime: now,
-              lastLoginIp: lastLoginIp,
-              lastLoginAddress: lastLoginAddress
-            })
-            .then(response => {
-              if (response.flag) {
-                this.$message({
-                  message: response.data.msg,
-                  type: 'success',
-                  center: true
-                })
-                this.$store.commit('changeUser', response.data.data)
-                if (response.data.data.single) {
-                  this.$router.push('/love')
-                  return false
-                }
-                this.$store.dispatch('getLoveInfo', response.data.data)
-                  .then(response => {
-                    this.$store.dispatch('checkLoveOnline', response.data.data).then(() => {
-                      this.$router.push('/love')
-                    })
-                  })
-                  .catch(error => {
-                    console.log(error)
-                  })
-              } else {
-                this.$message({
-                  message: response.data.msg,
-                  type: 'error',
-                  center: true
-                })
-              }
-            })
-            .catch(() => {
+          this.$http.post('/login/goLogin', {
+            userName: this.form.name,
+            password: Base64.encode(`${this.form.name},${this.form.password}`),
+            lastLoginTime: now,
+            lastLoginIp: lastLoginIp,
+            lastLoginAddress: lastLoginAddress
+          }).then(response => {
+            if (response.flag) {
               this.$message({
-                message: '登录失败',
+                message: response.data.msg,
+                type: 'success',
+                center: true
+              })
+              this.$store.commit('changeUser', response.data.data)
+              if (response.data.data.single) {
+                this.$router.push({ path: '/love', meta: { sureCheck: false }})
+                return
+              }
+              this.$store.dispatch('getLoveInfo', response.data.data).then(response => {
+                this.$store.dispatch('checkLoveOnline', response.data.data).then(() => {
+                  this.$router.push({ path: '/love', meta: { sureCheck: false }})
+                })
+              }).catch(error => {
+                console.log(error)
+              })
+            } else {
+              this.$message({
+                message: response.data.msg,
                 type: 'error',
                 center: true
               })
+            }
+          }).catch(() => {
+            this.$message({
+              message: '登录失败',
+              type: 'error',
+              center: true
             })
+          })
         }
       })
     },
@@ -174,7 +140,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 0.3rem;
+    margin-bottom: 5px;
   }
 
   .main_icon {
@@ -182,8 +148,8 @@ export default {
   }
 
   .card {
-    width: 17rem;
-    height: 16rem;
+    width: 260px;
+    height: 260px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -193,7 +159,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 0rem;
-    margin-bottom: 0rem;
+    margin-top: 0;
+    margin-bottom: 0;
   }
 </style>

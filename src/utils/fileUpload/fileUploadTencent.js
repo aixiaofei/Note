@@ -1,6 +1,7 @@
 import COS from 'cos-js-sdk-v5'
-import http from '@/components/global/axios'
-import globalData from '@/components/global/global'
+import http from '@/utils/axios'
+import globalData from '@/utils/global'
+
 const fileUpload = class fileUpload {
   static upload(fileContent, key, progress = null) {
     const cos = new COS({

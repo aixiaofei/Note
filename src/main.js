@@ -8,15 +8,17 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import store from '@/vuex/store'
 import '@/assets/css/color.css'
-import connection from '@/components/connection/connection'
-import processMessage from '@/components/connection/processMessage'
+import connection from '@/utils/connection/connection'
+import processMessage from '@/utils/connection/processMessage'
 import { Spin } from 'iview'
 import 'iview/dist/styles/iview.css'
 import { VAvatar } from 'vuetify/lib'
 import 'vuetify/src/stylus/app.styl'
 
 Vue.config.productionTip = false
-Vue.use(ElementUI)
+Vue.use(ElementUI, {
+  size: 'small'
+})
 Vue.component('Spin', Spin)
 Vue.component('v-avatar', VAvatar)
 const strategies = Vue.config.optionMergeStrategies

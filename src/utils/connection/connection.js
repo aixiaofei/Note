@@ -1,12 +1,12 @@
-import globalData from '@/components/global/global'
-import http from '@/components/global/axios'
+import globalData from '@/utils/global'
+import http from '@/utils/axios'
 
 export default {
   installed: false,
   install(Vue, options = {}) {
     if (this.installed) return
-    const WS_URL = 'http://localhost:8080/connection/connectionSocket'
-    const WSJS_URL = 'http://localhost:8080/connection/connectionSocket'
+    const WS_URL = 'localhost:8080/connectionSocket'
+    const WSJS_URL = 'localhost:8080/connectionSocket'
     const processMessage = options.processMessage
     let recovery = null
     let repeatNum = 0

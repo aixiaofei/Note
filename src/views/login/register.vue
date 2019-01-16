@@ -35,7 +35,8 @@
 </template>
 
 <script>
-import axios from 'axios'
+import http from '@/utils/axios'
+
 export default {
   name: 'Register',
   data() {
@@ -120,49 +121,38 @@ export default {
           const now = this.GLOBAL.dateFtt('yyyy-MM-dd hh:mm:ss', new Date())
           const lastLoginIp = returnCitySN['cip']
           const lastLoginAddress = returnCitySN['cname']
-          axios({
-            method: 'post',
-            url: '/login/goRegister',
-            data: {
-              userName: this.form.name,
-              password: this.form.password,
-              lastLoginTime: now,
-              lastLoginIp: lastLoginIp,
-              lastLoginAddress: lastLoginAddress,
-              sex: Object.is(this.form.sex, '1') ? 1 : 2,
-              birth: birth,
-              loveLock: this.form.loveLock
-            }
-          })
-            .then(response => {
-              if (response.data.statu === 'success') {
-                this.$message({
-                  message: response.data.msg,
-                  type: 'success',
-                  center: true
-                })
-                this.$store.commit('changeUser', response.data.data)
-                this.$router.push('/')
-              } else {
-                this.$message({
-                  message: response.data.msg,
-                  type: 'error',
-                  center: true
-                })
-                return false
-              }
-            })
-            .catch(() => {
+          http.post('/login/goRegister', {
+            userName: this.form.name,
+            password: this.form.password,
+            lastLoginTime: now,
+            lastLoginIp: lastLoginIp,
+            lastLoginAddress: lastLoginAddress,
+            sex: Object.is(this.form.sex, '1') ? 1 : 2,
+            birth: birth,
+            loveLock: this.form.loveLock
+          }).then(response => {
+            if (response.flag) {
               this.$message({
-                message: '注册失败',
+                message: response.data.msg,
+                type: 'success',
+                center: true
+              })
+              this.$store.commit('changeUser', response.data.data)
+              this.$router.push('/')
+            } else {
+              this.$message({
+                message: response.data.msg,
                 type: 'error',
                 center: true
               })
-              return false
+            }
+          }).catch(() => {
+            this.$message({
+              message: '注册失败',
+              type: 'error',
+              center: true
             })
-        } else {
-          console.log('error submit')
-          return false
+          })
         }
       })
     }

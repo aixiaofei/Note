@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import vuexAlong from 'vuex-along'
-import http from '@/components/global/axios'
+import http from '@/utils/axios'
 Vue.use(Vuex)
 
 const state = {

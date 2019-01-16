@@ -134,14 +134,18 @@
 </template>
 
 <script>
-import weather from '@/components/commons/weather'
-import showStatus from '@/components/commons/showStatus'
+import weather from '@/components/weather'
+import showStatus from '@/components/showStatus'
 import { mapState } from 'vuex'
-import fileUpload from '@/components/fileUpload/fileUploadTencent'
+import fileUpload from '@/utils/fileUpload/fileUploadTencent'
 import { Base64 } from 'js-base64'
 
 export default {
   name: 'LovePage',
+  components: {
+    weather,
+    showStatus
+  },
   data() {
     return {
       netpre: 'http://',
@@ -254,7 +258,7 @@ export default {
     changePorgress(progress) {
       this.progressData = progress
     },
-    uploadSuccess(response, file, fileList) {
+    uploadSuccess(response, file) {
       this.progressData = 0
       this.showProgress = false
       const fileName = file.name.split('.')
@@ -271,7 +275,7 @@ export default {
       this.fileData.fileUrl = response.Location
       this.changeAvatar()
     },
-    uploadError(err, file, fileList) {
+    uploadError() {
       this.progressData = 0
       this.showProgress = false
       this.$notify({
@@ -352,10 +356,6 @@ export default {
     unLinkLove() {
 
     }
-  },
-  components: {
-    weather,
-    showStatus
   }
 }
 
