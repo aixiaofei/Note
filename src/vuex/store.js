@@ -31,40 +31,34 @@ const mutations = {
 const actions = {
   getLoveInfo({ commit }, user) {
     return new Promise((reslove, reject) => {
-      http
-        .get('/love/getLoveInfo', {
-          userId: user.userId
-        })
-        .then(response => {
-          if (response.flag) {
-            commit('changeLoveUser', response.data.data)
-          } else {
-            commit('changeLoveUser', {})
-          }
-          reslove(response)
-        })
-        .catch(error => {
-          reject(error)
-        })
+      http.get('/love/getLoveInfo', {
+        userId: user.userId
+      }).then(response => {
+        if (response.flag) {
+          commit('changeLoveUser', response.data.data)
+        } else {
+          commit('changeLoveUser', {})
+        }
+        reslove(response)
+      }).catch(error => {
+        reject(error)
+      })
     })
   },
   checkLoveOnline({ commit }, loveUser) {
     return new Promise((reslove, reject) => {
-      http
-        .get('/love/checkLoveOnline', {
-          userId: loveUser.userId
-        })
-        .then(response => {
-          if (response.flag) {
-            commit('changeLoveUserOnline', true)
-          } else {
-            commit('changeLoveUserOnline', false)
-          }
-          reslove()
-        })
-        .catch(error => {
-          reject(error)
-        })
+      http.get('/love/checkLoveOnline', {
+        userId: loveUser.userId
+      }).then(response => {
+        if (response.flag) {
+          commit('changeLoveUserOnline', true)
+        } else {
+          commit('changeLoveUserOnline', false)
+        }
+        reslove()
+      }).catch(error => {
+        reject(error)
+      })
     })
   }
 }

@@ -10,62 +10,37 @@ const instance = axios.create({
   withCredentials: true
 })
 
-// response 拦截器
-instance.interceptors.response.use(
-  response => {
-    if (Object.is(response.data.code, '201')) {
-      router.push({ name: 'Login', params: { notCheck: true }})
-      return Promise.reject('用户未登录')
-    }
-    if (Object.is(response.data.code, '202')) {
-      Message.error({ 'message': response.data.msg, 'center': true })
-      router.push({ name: 'Login', params: { notCheck: true }})
-      return Promise.reject('会话失效')
-    }
-    return response
-  },
-  error => {
-    router.push({ name: 'Login', params: { notCheck: true }})
-    return Promise.reject(error)
-  }
-)
+const process = (url, data, method) => {
+  return new Promise((resolve, reject) => {
+    const tag = Object.is(method, 'get') ? 'params' : 'data'
+    instance({
+      method: method,
+      url: url,
+      [tag]: data
+    }).then(response => {
+      if (['201', '202'].includes(response.data.code)) {
+        if (Object.is(response.data.code, '202')) Message.error({ 'message': response.data.msg, 'center': true })
+        router.push({ name: 'Login', params: { notCheck: true }})
+        return false
+      }
+      if (Object.is(response.data.statu, 'success')) {
+        Object.assign(response, {
+          flag: true
+        })
+      }
+      resolve(response)
+    }).catch(error => {
+      console.log(error)
+      reject(error)
+    })
+  })
+}
 
 export default {
-  async get(url, data = {}) {
-    let result = null
-    await instance({
-      method: 'get',
-      url: url,
-      params: data
-    }).then(response => {
-      if (Object.is(response.data.statu, 'success')) {
-        Object.assign(response, {
-          flag: true
-        })
-      }
-      result = response
-    }).catch(error => {
-      console.log(error)
-    })
-    return result
+  get(url, data = {}) {
+    return process(url, data, 'get')
   },
-
-  async post(url, data = {}) {
-    let result = null
-    await instance({
-      method: 'post',
-      url: url,
-      data: data
-    }).then(response => {
-      if (Object.is(response.data.statu, 'success')) {
-        Object.assign(response, {
-          flag: true
-        })
-      }
-      result = response
-    }).catch(error => {
-      console.log(error)
-    })
-    return result
+  post(url, data = {}) {
+    return process(url, data, 'post')
   }
 }
