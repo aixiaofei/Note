@@ -13,64 +13,59 @@ const instance = axios.create({
 // response 拦截器
 instance.interceptors.response.use(
   response => {
-    if (['203', '200'].includes(response.data.code)) {
-      return response
-    } else if (Object.is(response.data.code, '201')) {
-      router.push('/')
-    } else if (Object.is(response.data.code, '202')) {
-      Message.error({ 'message': response.data.msg, 'center': true })
-      router.push('/')
+    if (Object.is(response.data.code, '201')) {
+      router.push({ name: 'Login', params: { notCheck: true }})
+      return Promise.reject('用户未登录')
     }
+    if (Object.is(response.data.code, '202')) {
+      Message.error({ 'message': response.data.msg, 'center': true })
+      router.push({ name: 'Login', params: { notCheck: true }})
+      return Promise.reject('会话失效')
+    }
+    return response
   },
   error => {
-    console.log(error)
-    Message.error({ 'message': '未知请求错误', 'center': true })
-    router.push('/')
+    router.push({ name: 'Login', params: { notCheck: true }})
+    return Promise.reject(error)
   }
 )
 
 export default {
-  get(url, data) {
-    return new Promise((reslove, reject) => {
-      instance({
-        method: 'get',
-        url: url,
-        params: data
-      }).then(response => {
-        if (Object.is(response.data.statu, 'success')) {
-          response = Object.assign(response, {
-            flag: true
-          })
-          reslove(response)
-        } else {
-          reslove(response)
-        }
-      }).catch(error => {
-        console.log(error)
-        reject()
-      })
+  async get(url, data = {}) {
+    let result = null
+    await instance({
+      method: 'get',
+      url: url,
+      params: data
+    }).then(response => {
+      if (Object.is(response.data.statu, 'success')) {
+        Object.assign(response, {
+          flag: true
+        })
+      }
+      result = response
+    }).catch(error => {
+      console.log(error)
     })
+    return result
   },
 
-  post(url, data) {
-    return new Promise((reslove, reject) => {
-      instance({
-        method: 'post',
-        url: url,
-        data: data
-      }).then(response => {
-        if (Object.is(response.data.statu, 'success')) {
-          response = Object.assign(response, {
-            flag: true
-          })
-          reslove(response)
-        } else {
-          reslove(response)
-        }
-      }).catch(error => {
-        console.log(error)
-        reject()
-      })
+  async post(url, data = {}) {
+    let result = null
+    await instance({
+      method: 'post',
+      url: url,
+      data: data
+    }).then(response => {
+      if (Object.is(response.data.statu, 'success')) {
+        Object.assign(response, {
+          flag: true
+        })
+      }
+      result = response
+    }).catch(error => {
+      console.log(error)
     })
+    return result
   }
 }

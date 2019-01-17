@@ -34,7 +34,7 @@ export default {
   name: 'Login',
   data() {
     var checkName = (rule, value, callback) => {
-      if (value === '') {
+      if (Object.is(value, '')) {
         callback(new Error('请输入用户名'))
       }
       if (!/^[\S]{3,12}$/.test(value)) {
@@ -46,7 +46,7 @@ export default {
       callback()
     }
     var checkPassword = (rule, value, callback) => {
-      if (value === '') {
+      if (Object.is(value, '')) {
         callback(new Error('请输入密码'))
       }
       if (!/^[\S]{6,12}$/.test(value)) {
@@ -90,15 +90,13 @@ export default {
               })
               this.$store.commit('changeUser', response.data.data)
               if (response.data.data.single) {
-                this.$router.push({ path: '/love', meta: { sureCheck: false }})
+                this.$router.push('/love')
                 return
               }
               this.$store.dispatch('getLoveInfo', response.data.data).then(response => {
                 this.$store.dispatch('checkLoveOnline', response.data.data).then(() => {
-                  this.$router.push({ path: '/love', meta: { sureCheck: false }})
+                  this.$router.push('/love')
                 })
-              }).catch(error => {
-                console.log(error)
               })
             } else {
               this.$message({

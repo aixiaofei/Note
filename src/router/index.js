@@ -21,8 +21,8 @@ const router = new Router({
       component: () => import('@/views/lovePage'),
       children: [
         {
-          path: '/',
-          name: 'loveContent',
+          path: '',
+          name: 'LoveContent',
           component: () => import('@/views/loveContent')
         }
       ]
@@ -30,16 +30,19 @@ const router = new Router({
   ]
 })
 
-const whiteList = ['/', '/register']
+const whiteList = ['/register']
 
 router.beforeEach((to, from, next) => {
-  if (whiteList.includes(to.path) || !to.meta.sureCheck) {
+  if (whiteList.includes(to.path) || to.params.notCheck) {
     next()
     return
   }
-  http.get({
-    method: 'get',
-    url: '/checkPermission'
+  http.get('/checkPermission').then(response => {
+    if (Object.is(response.data.code, '203')) {
+      if (Object.is(to.path, '/')) {
+        next('/love')
+      } else next()
+    }
   })
 })
 
